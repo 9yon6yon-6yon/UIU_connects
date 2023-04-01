@@ -12,8 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('education', function (Blueprint $table) {
-            $table->id();
+            $table->id('edu_id')->autoIncrement();
+            $table->unsignedBigInteger('user_id');
+            $table->string('institution', 255);
+            $table->string('degree', 255);
+            $table->string('field_of_study', 255);
+            $table->date('graduation_date');
+            $table->text('description');
             $table->timestamps();
+            $table->foreign('user_id')->references('u_id')->on('users')->onDelete('cascade');
         });
     }
 

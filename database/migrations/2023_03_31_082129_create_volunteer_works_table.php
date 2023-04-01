@@ -12,8 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('volunteer_works', function (Blueprint $table) {
-            $table->id();
+            $table->id('volunteer_id')->autoIncrement();
+            $table->unsignedBigInteger('user_id');
+            $table->string('organization');
+            $table->string('role',100);
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->text('description');
             $table->timestamps();
+            $table->foreign('user_id')->references('u_id')->on('users')->onDelete('cascade');
+
         });
     }
 
