@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('user_type', ['student', 'teacher', 'admin'])->default('student');
             $table->string('status')->default('pending');
-            $table->string('is_active');
+            $table->string('is_active')->default(false);
             // $table->rememberToken();
             $table->timestamps();
         });

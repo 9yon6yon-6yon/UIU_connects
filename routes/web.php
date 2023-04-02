@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,9 +17,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('index');
 });
-Route::middleware(['auth'])->group(function () {
-    // User routes
-    // Route::get('/users', 'UserController@index')->name('users.index');
+Route::get('/login', [UserController::class, 'login'])->name('user-login');
+Route::post('/login', [UserController::class, 'loginCheck']);
+Route::get('/signup', [UserController::class, 'register'])->name('user-sign-up');
+Route::post('/signup', [UserController::class, 'regUser']);
+Route::get('/reset-password', [UserController::class, 'resetPassword'])->name('reset.password');
+Route::get('/user',function(){
+    return view('dashboard');
+});
+Route::get('/user/{id}',[UserController::class,'profile'])->name('user.profile');;
+
+
+// Route::get('/users', 'UserController@index')->name('users.index');
     // Route::get('/users/{id}', 'UserController@show')->name('users.show');
 
     // // Event routes
@@ -44,4 +54,3 @@ Route::middleware(['auth'])->group(function () {
     // // Follow routes
     // Route::post('/follow/{id}', 'FollowController@follow')->name('follow.follow');
     // Route::delete('/unfollow/{id}', 'FollowController@unfollow')->name('follow.unfollow');
-});
