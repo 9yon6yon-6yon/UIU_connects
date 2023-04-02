@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Testimonials extends Model
 {
     use HasFactory;
+    protected $testimonials;
+    protected $testimonial_id;
 }

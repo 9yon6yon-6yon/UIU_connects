@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Follows extends Model
 {
     use HasFactory;
+    protected $follows;
+    protected $follow_id;
 }

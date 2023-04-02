@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Experiences extends Model
 {
     use HasFactory;
+    protected $experiences;
+    protected $e_id;
 }

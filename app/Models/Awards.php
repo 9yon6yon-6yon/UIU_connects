@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Awards extends Model
 {
     use HasFactory;
+    protected $awards;
+    protected $awrd_id;
 }

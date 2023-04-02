@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class JobApplications extends Model
 {
     use HasFactory;
+    protected $job_application;
+    protected $j_application;
 }

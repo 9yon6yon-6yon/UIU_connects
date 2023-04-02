@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Projects extends Model
 {
     use HasFactory;
+    protected $projects;
+    protected $project_id;
 }

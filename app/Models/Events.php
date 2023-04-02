@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Events extends Model
 {
     use HasFactory;
+    protected $events;
+    protected $event_id;
 }

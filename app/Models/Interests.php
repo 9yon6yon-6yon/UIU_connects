@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Interests extends Model
 {
     use HasFactory;
+    protected $interests;
+    protected $interest_id;
 }
