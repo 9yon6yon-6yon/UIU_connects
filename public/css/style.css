@@ -30,13 +30,16 @@ button.btn-with-bg{
     background-color: var(--primary);
 }
 
+
 /* ....................  */
 
 /* Home Page Start  */
 .header-area {
     position: relative;
+    
 }
 .main-menu{
+    
     position: absolute;
     top: 0;
     left: 0;
@@ -45,6 +48,7 @@ button.btn-with-bg{
     z-index: 999;
 }
 .home-menu-btn{
+    
     background: #C3612C;
     padding: 12px 50px;
     border-radius: 10px;
@@ -119,10 +123,10 @@ ul.navbar-nav li a{
     color: #414141;
     font-weight: 600;
     margin-bottom: 20px;
+    
 }
 .main-heading-right ul {
     display: flex;
-    position:fixed;
     justify-content: space-between;
     margin-bottom: 30px;
 }
@@ -156,6 +160,7 @@ ul.navbar-nav li a{
     font-weight: 400 ;
     font-size: 12px;
 }
+
 /* Home Page End  */
 /* Create Account Start  */
 .create-account-page{
@@ -214,8 +219,8 @@ div.create-account-form p{
 
 /* Sign Up Page Start  */
 .sign-up-area{
-    width: 90%;
-    margin: 0 auto;
+    width: 50%;
+    margin: auto;
     padding: 50px 0px 50px 0px;
 }
 .sign-up-container div.left{
@@ -232,7 +237,7 @@ div.create-account-form p{
     height: 100%;
 }
 .sign-up-form-area{
-    padding: 170px;
+    padding: 17px;
     text-align: center;
 }
 .sign-up-form-area h1{ 
@@ -286,7 +291,8 @@ div.sign-up-form button.btn-2{
 
 /* Contact Info Page Start */
 section.contact-info-area .right-side{
-    width: 92%;
+    margin: auto;
+    width: 72%;
 }
 .info-container {
     background: #D9D9D9;
@@ -296,10 +302,13 @@ section.contact-info-area .right-side{
     margin-bottom: 30px;
 }
 .info-container .search input{
-    width: 100%;
+    
+    width: 50%;
+    position: sticky;
     border: none;
     padding: 10px 0px;
     margin-top: 10px;
+    border-radius: 10px;
 } 
 .contact-single-card{
    background: #F0F2F5;
@@ -326,7 +335,8 @@ section.contact-info-area .right-side{
 
 /* Log Out Area Start  */
 .log-out-info-area{
-    width: 92%;
+    margin: auto;
+    width: 50%;
 }
 .log-out-content{
     height: 60vh;
@@ -361,6 +371,7 @@ section.contact-info-area .right-side{
 /* Log Out Area End  */
 
 /* Homepage Start  */
+
 .home-right-side{
     width: 92%;
     height: 100vh;
@@ -502,7 +513,7 @@ section.contact-info-area .right-side{
     width: 20%;
 }
 .send-message-area{
-    width: 80%;
+    width: 50%;
 }
 .chat-heading{
     background: #D9D9D9;
@@ -585,7 +596,8 @@ section.contact-info-area .right-side{
 
 /* Profile Page start  */
 .profile-info-container{
-    width: 92%;
+    margin: auto;
+    width: 52%;
 }
 .profile-phone {
     margin-bottom: 15px;
