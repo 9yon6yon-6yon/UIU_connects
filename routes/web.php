@@ -24,12 +24,19 @@ Route::post('/signup', [UserController::class, 'regUser']);
 Route::get('/reset-password', [UserController::class, 'resetPassword'])->name('reset.password');
 Route::get('/user',function(){
     return view('dashboard');
+<<<<<<< Updated upstream
 });
 Route::get('/user/{id}',[UserController::class,'profile'])->name('user.profile');;
 
 
 // Route::get('/users', 'UserController@index')->name('users.index');
     // Route::get('/users/{id}', 'UserController@show')->name('users.show');
+=======
+})->name('user.dashboard');
+Route::get('/user/{id}',[UserController::class,'profile'])->name('user.profile');;
+
+
+>>>>>>> Stashed changes
 
     // // Event routes
     // Route::get('/events', 'EventController@index')->name('events.index');
