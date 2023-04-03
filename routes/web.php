@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,19 +25,23 @@ Route::post('/signup', [UserController::class, 'regUser']);
 Route::get('/reset-password', [UserController::class, 'resetPassword'])->name('reset.password');
 Route::get('/user',function(){
     return view('dashboard');
-<<<<<<< Updated upstream
-});
-Route::get('/user/{id}',[UserController::class,'profile'])->name('user.profile');;
+})->name('user.dashboard');
+Route::get('/user/{id}',[UserController::class,'profile'])->name('user.profile');
+Route::get('/posts',[PostsController::class,'index'])->name('user.posts');
+Route::post('/posts',[PostsController::class,'store']);
+Route::get('/posts/view/{id}',[PostsController::class,'show']);
+Route::get('/posts/edit/{id}',[PostsController::class,'edit']);
+Route::put('/posts/update/{id}',[PostsController::class,'update']);
+Route::delete('/posts/delete/{id}',[PostsController::class,'destroy']);
+Route::get('/settings', function(){
+    return view('settings');
+})->name('user.settings');
+Route::get('/settings/logout',[UserController::class,'logout'])->name('user.logout');
+Route::get('/settings/offline/{id?}',[UserController::class,'logout'])->name('user.offline');
 
 
 // Route::get('/users', 'UserController@index')->name('users.index');
     // Route::get('/users/{id}', 'UserController@show')->name('users.show');
-=======
-})->name('user.dashboard');
-Route::get('/user/{id}',[UserController::class,'profile'])->name('user.profile');;
-
-
->>>>>>> Stashed changes
 
     // // Event routes
     // Route::get('/events', 'EventController@index')->name('events.index');

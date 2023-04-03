@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use stdClass;
 
 class UserController extends Controller
 {
@@ -24,13 +25,16 @@ class UserController extends Controller
         ]);
 
         if (Auth::attempt($request->only('email', 'password'))) {
-<<<<<<< Updated upstream
-=======
-            // Session::put('$user_email', $request['email']);
-            // $user_mail = Session::get('$user_email');
-            // DB::update("UPDATE `users` SET `is_active`= ? WHERE `email`='$user_mail';", [1]);
->>>>>>> Stashed changes
-            return redirect('user');
+            Session::put('$user_email', $request['email']);
+            $userdetails = DB::select("SELECT `u_id` from `users` where `email`=?;", [$request['email']]);
+            $user = new stdClass();
+            if (!empty($userdetails)) {
+                $user->u_id = $userdetails[0]->u_id;
+            }
+            Session::put('$user_id', $user->u_id);
+            $user_mail = Session::get('$user_email');
+            DB::update("UPDATE `users` SET `is_active`= ? WHERE `email`='$user_mail';", [1]);
+             return redirect('user');
         }
     }
     public function register()
@@ -67,22 +71,24 @@ class UserController extends Controller
     }
     public function profile($id)
     {
-<<<<<<< Updated upstream
-        $user = DB::select('select email,status from users where u_id=?',[$id]);
-        
-=======
-        $user = DB::select('select email,status from users where u_id=?', [$id]);
->>>>>>> Stashed changes
+        $user = DB::select('select * from users where u_id=?', [$id]);
         return view('dashboard')->with(compact('user'));
     }
-    public function logout()
+    public function logout($id = null)
     {
-<<<<<<< Updated upstream
-=======
-        $email = Session::get('$user_email');
-        DB::update("UPDATE `users` SET `is_active`='? WHERE `email`= '$email';", [0]);
->>>>>>> Stashed changes
-        Session::flush();
-        Auth::logout();
+        if ($id) {
+            $user = DB::select('select * from users where u_id=?', [$id]);
+            if ($user) {
+                DB::update("UPDATE `users` SET `is_active`= ? WHERE `u_id`='$id';", [0]);
+                return redirect()->back()->with('success', 'User set to offline successfully!');
+            } else {
+                return redirect()->back()->with('error', 'User not found!');
+            }
+        } else {
+            $email = Session::get('$user_email');
+            DB::update("UPDATE `users` SET `is_active`=? WHERE `email`= '$email';", [0]);
+            Session::flush();
+            return redirect()->route('user-login')->with('success', 'Logged out successfully!');
+        }
     }
 }
