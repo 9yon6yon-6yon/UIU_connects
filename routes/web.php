@@ -22,7 +22,11 @@ Route::get('/login', [UserController::class, 'login'])->name('user-login');
 Route::post('/login', [UserController::class, 'loginCheck']);
 Route::get('/signup', [UserController::class, 'register'])->name('user-sign-up');
 Route::post('/signup', [UserController::class, 'regUser']);
-Route::get('/reset-password', [UserController::class, 'resetPassword'])->name('reset.password');
+Route::get('/forget-password',[UserController::class,'forgetPageView'])->name('forget.password.form');
+Route::post('/forget-password',[UserController::class,'sendResetLink'])->name('forget.password.link');
+Route::get('/reset-password/{token}', [UserController::class, 'resetPassView'])->name('reset.password.view');
+Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('reset.password');
+
 Route::get('/user',function(){
     return view('dashboard');
 })->name('user.dashboard');
@@ -38,25 +42,6 @@ Route::get('/settings', function(){
 })->name('user.settings');
 Route::get('/settings/logout',[UserController::class,'logout'])->name('user.logout');
 Route::get('/settings/offline/{id?}',[UserController::class,'logout'])->name('user.offline');
-
-
-// Route::get('/users', 'UserController@index')->name('users.index');
-    // Route::get('/users/{id}', 'UserController@show')->name('users.show');
-
-    // // Event routes
-    // Route::get('/events', 'EventController@index')->name('events.index');
-    // Route::get('/events/{id}', 'EventController@show')->name('events.show');
-
-    // // Job Post routes
-    // Route::get('/jobs', 'JobPostController@index')->name('jobs.index');
-    // Route::get('/jobs/{id}', 'JobPostController@show')->name('jobs.show');
-    // Route::post('/jobs', 'JobPostController@store')->name('jobs.store');
-    // Route::put('/jobs/{id}', 'JobPostController@update')->name('jobs.update');
-    // Route::delete('/jobs/{id}', 'JobPostController@destroy')->name('jobs.destroy');
-
-    // // Job Applied routes
-    // Route::get('/jobs/{id}/apply', 'JobAppliedController@apply')->name('jobs.apply');
-    // Route::get('/jobs/{id}/applicants', 'JobAppliedController@applicants')->name('jobs.applicants');
 
     // // Chat routes
     // Route::get('/chat', 'ChatController@index')->name('chat.index');
