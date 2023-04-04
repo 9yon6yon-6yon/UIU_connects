@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use stdClass;
 use Carbon\Carbon;
-use Illuminate\Http\Client\ResponseSequence;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 

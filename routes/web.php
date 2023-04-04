@@ -44,11 +44,5 @@ Route::get('/settings/logout',[UserController::class,'logout'])->name('user.logo
 Route::get('/settings/offline/{id?}',[UserController::class,'logout'])->name('user.offline');
 Route::get('/search/{key?}',[UserController::class,'searchUsers'])->name('user.search');
 Route::get('/profile/{id}',[UserController::class,'personalInfo'])->name('user.profile.all');
-    // // Chat routes
-    // Route::get('/chat', 'ChatController@index')->name('chat.index');
-    // Route::post('/chat', 'ChatController@store')->name('chat.store');
-    // Route::get('/chat/{id}', 'ChatController@show')->name('chat.show');
-
-    // // Follow routes
-    // Route::post('/follow/{id}', 'FollowController@follow')->name('follow.follow');
-    // Route::delete('/unfollow/{id}', 'FollowController@unfollow')->name('follow.unfollow');
+// Route::post('/follow/{id}', 'FollowController@follow')->name('follow.follow');
+// Route::delete('/unfollow/{id}', 'FollowController@unfollow')->name('follow.unfollow');

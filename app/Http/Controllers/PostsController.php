@@ -13,8 +13,7 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $posts = Posts::all();
-        //echo $posts;
+        $posts = Posts::orderBy('created_at', 'desc')->get();
        return view('post', compact('posts'));
     }
 

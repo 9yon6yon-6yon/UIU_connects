@@ -15,6 +15,7 @@ ul{
     margin: 0;
     padding: 0;
     list-style-type: none;
+    
 }
 img{
     max-width: 100%;
@@ -90,7 +91,7 @@ ul.navbar-nav li a{
     color: #C3612C;
     font-size: 15px;
     font-weight: 600;
-} 
+}
 .home-main-area{
     padding-top: 60px;
     padding-bottom: 60px;
@@ -282,6 +283,8 @@ div.sign-up-form button.btn-2{
     height: 100vh;
     width: 8%;
     align-content: space-around;
+    position: fixed;
+    
 }
 .sidemenu-icon-container{
     display: flex;
@@ -293,24 +296,23 @@ div.sign-up-form button.btn-2{
 
 /* Contact Info Page Start */
 section.contact-info-area .right-side{
-    margin: auto;
-    width: 72%;
+    width: 92%;
+   
 }
 .info-container {
     background: #D9D9D9;
     padding: 18px 24px;
+    margin-left: 130px;
+    position: relative;
 }
 .info-container .search{
     margin-bottom: 30px;
 }
 .info-container .search input{
-    
-    width: 70%;
-    position: sticky;
+    width: 100%;
     border: none;
     padding: 10px 0px;
     margin-top: 10px;
-    border-radius: 10px;
 } 
 .contact-single-card{
    background: #F0F2F5;
@@ -332,7 +334,6 @@ section.contact-info-area .right-side{
 .contact-single-card .quick-contact img{
     margin-bottom: 10px;
 }
-
 /* Contact Info Page End */
 
 /* Log Out Area Start  */
@@ -378,6 +379,7 @@ section.contact-info-area .right-side{
     width: 92%;
     height: 100vh;
     padding: 20px 20px;
+    margin-left: 120px;
 }
 .home-user-info{
     height: 100vh;
