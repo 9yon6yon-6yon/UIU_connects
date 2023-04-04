@@ -5,5 +5,7 @@
 @endpush
 
 @include('nav-bar')
-welcome {{ Session::get('$user_email') }}
+<div class="container">{{ $user[0]->email }}</div>
+
+</section>
 @include('footer')

@@ -27,9 +27,7 @@ Route::post('/forget-password',[UserController::class,'sendResetLink'])->name('f
 Route::get('/reset-password/{token}', [UserController::class, 'resetPassView'])->name('reset.password.view');
 Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('reset.password');
 
-Route::get('/user',function(){
-    return view('dashboard');
-})->name('user.dashboard');
+Route::get('/user',[UserController::class,'dashboard'])->name('user.dashboard');
 Route::get('/user/{id}',[UserController::class,'profile'])->name('user.profile');
 Route::get('/posts',[PostsController::class,'index'])->name('user.posts');
 Route::post('/posts',[PostsController::class,'store']);

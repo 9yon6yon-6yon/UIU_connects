@@ -19,9 +19,9 @@
                             <p>Student, UIU </p>
                         </div>
                         <div class="user-button">
-                            <button class="post-btn">Post</button>
+                          <button class="post-btn">Post</button>
                             <button class="message-btn">Message</button>
-                            <a href="profile.html"><button class="edit-profile-btn">Edit Profile</button></a>
+                            <a href="{{route('user.profile.all',['id' => Session::get('$user_id')])}}"><button class="edit-profile-btn">Edit Profile</button></a>
                         </div>
                     </div>
                     <hr>
@@ -29,8 +29,8 @@
                         <h4 class="about-heading">About</h4>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam dolore adipisci iusto consectetur quae inventore dolores accusamus facilis ad? Vero!</p>
                         <h4 class="quick-contact">Quick Contacts</h4> <br>
-                        <img src="images/icons/quick-contact-message.png" alt=""> <br>
-                        <img src="images/icons/quick-contact-phone.png" alt="">
+                        <img src="{{asset('image/icons/quick-contact-message.png')}}" alt=""> <br>
+                        <img src="{{asset('image/icons/quick-contact-phone.png')}}" alt="">
                     </div>
                 </div>
             </div>

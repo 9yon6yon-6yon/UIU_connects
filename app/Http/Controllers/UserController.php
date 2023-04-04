@@ -69,7 +69,9 @@ class UserController extends Controller
     }
     public function dashboard()
     {
-        return view('dashboard');
+        $id =  Session::get('$user_id');
+        $user = DB::select('select * from users where u_id=?', [$id]);
+        return view('dashboard',compact('user'));
     }
     public function forgetPageView()
     {
@@ -140,8 +142,8 @@ class UserController extends Controller
                     DB::update("UPDATE `users` SET `is_active`= ? WHERE `u_id`='$id';", [1]);
                     return redirect()->back()->with('success', 'User set to online successfully!');
                 }
-            }  return redirect()->back()->with('error', 'User not found!');
-          
+            }
+            return redirect()->back()->with('error', 'User not found!');
         } else {
             $email = Session::get('$user_email');
             DB::update("UPDATE `users` SET `is_active`=? WHERE `email`= '$email';", [0]);
