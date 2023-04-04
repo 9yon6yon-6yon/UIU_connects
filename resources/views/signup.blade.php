@@ -17,7 +17,9 @@
 
                                 <h2 class="fw-bold mb-2 text-uppercase">Create new account</h2>
                                 <p class="text-white-50 mb-5">Please enter your information here!</p>
-
+                                @if(Session::has('success'))
+                                <p class="alert alert-success">{{ Session::get('success') }}</p>
+                                @endif
                                 <div class="form-outline form-white mb-4">
                                     <input type="email" name="email" id="typeEmailX"
                                         class="form-control form-control-lg" placeholder="Email address" />

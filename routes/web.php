@@ -42,7 +42,8 @@ Route::get('/settings', function(){
 })->name('user.settings');
 Route::get('/settings/logout',[UserController::class,'logout'])->name('user.logout');
 Route::get('/settings/offline/{id?}',[UserController::class,'logout'])->name('user.offline');
-
+Route::get('/search/{key?}',[UserController::class,'searchUsers'])->name('user.search');
+Route::get('/profile/{id}',[UserController::class,'personalInfo'])->name('user.profile.all');
     // // Chat routes
     // Route::get('/chat', 'ChatController@index')->name('chat.index');
     // Route::post('/chat', 'ChatController@store')->name('chat.store');

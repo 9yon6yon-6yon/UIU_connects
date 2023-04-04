@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use stdClass;
 use Carbon\Carbon;
+use Illuminate\Http\Client\ResponseSequence;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -29,16 +30,18 @@ class UserController extends Controller
 
         if (Auth::attempt($request->only('email', 'password'))) {
             Session::put('$user_email', $request['email']);
-            $userdetails = DB::select("SELECT `u_id` from `users` where `email`=?;", [$request['email']]);
+            $userdetails = DB::select("SELECT * from `users` where `email`=?;", [$request['email']]);
             $user = new stdClass();
             if (!empty($userdetails)) {
                 $user->u_id = $userdetails[0]->u_id;
             }
             Session::put('$user_id', $user->u_id);
+            Session::put('$is_active', 1);
             $user_mail = Session::get('$user_email');
             DB::update("UPDATE `users` SET `is_active`= ? WHERE `email`='$user_mail';", [1]);
             return redirect('user');
         }
+        return back()->with('fail', 'Wrong email or password');
     }
     public function register()
     {
@@ -63,7 +66,7 @@ class UserController extends Controller
         ]);
 
         $user->save();
-        return redirect()->route('user-login')->with('success', 'Your account has been created. Please login.');
+        return redirect()->route('user-login')->with('success', 'Your account has been created Successfully');
     }
     public function dashboard()
     {
@@ -131,16 +134,39 @@ class UserController extends Controller
         if ($id) {
             $user = DB::select('select * from users where u_id=?', [$id]);
             if ($user) {
-                DB::update("UPDATE `users` SET `is_active`= ? WHERE `u_id`='$id';", [0]);
-                return redirect()->back()->with('success', 'User set to offline successfully!');
-            } else {
-                return redirect()->back()->with('error', 'User not found!');
-            }
+                if ($user[0]->is_active) {
+                    DB::update("UPDATE `users` SET `is_active`= ? WHERE `u_id`='$id';", [0]);
+                    return redirect()->back()->with('success', 'User set to offline successfully!');
+                } else {
+                    DB::update("UPDATE `users` SET `is_active`= ? WHERE `u_id`='$id';", [1]);
+                    return redirect()->back()->with('success', 'User set to online successfully!');
+                }
+            }  return redirect()->back()->with('error', 'User not found!');
+          
         } else {
             $email = Session::get('$user_email');
             DB::update("UPDATE `users` SET `is_active`=? WHERE `email`= '$email';", [0]);
             Session::flush();
             return redirect()->route('user-login')->with('success', 'Logged out successfully!');
         }
+    }
+    public function searchUsers($key = null)
+    {
+        if ($key) {
+            $user = DB::table('users')
+                ->join('personal_infos', 'users.u_id', '=', 'personal_infos.user_id')
+                ->where('users.email', 'like', '%' . $key . '%')
+                ->orWhere('personal_infos.userName', 'like', '%' . $key . '%')
+                ->select('users.*', 'personal_infos.*')
+                ->get();
+            return response()->json(['users' => $user]);
+        } else {
+            return view('search');
+        }
+    }
+    public function personalInfo($id)
+    {
+        // $user = DB::select("SELECT * FROM `users` u join ");
+        return view('profile');
     }
 }
