@@ -19,7 +19,7 @@
                                 <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
                                 <p class="text-white-50 mb-5">Please enter your email and password!</p>
                                 @if(Session::has('fail'))
-                                    <p class="alert alert-info">{{ Session::get('fail') }}</p>
+                                    <p class="alert alert-warning">{{ Session::get('fail') }}</p>
                                 @endif
                                 <div class="form-outline form-white mb-4">
                                     <input type="email" name="email" id="typeEmailX"
