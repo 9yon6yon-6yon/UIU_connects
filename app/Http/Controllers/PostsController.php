@@ -64,4 +64,15 @@ class PostsController extends Controller
     {
         //
     }
+    public function upvote($id)
+    {
+        DB::update("UPDATE posts SET upvotes = upvotes + 1 WHERE post_id = $id;");
+        return redirect()->back();
+    }
+
+    public function downvote($id)
+    {
+        DB::update("UPDATE posts SET downvotes = downvotes + 1 WHERE post_id = $id;");
+        return redirect()->back();
+    }
 }

@@ -48,13 +48,13 @@
                                       <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNav">
                                         <ul class="navbar-nav ">
                                           <li class="nav-item">
-                                            <a class="nav-link active" aria-current="page" href="#home">General</a>
+                                            <a class="nav-link active" aria-current="page" href="#">General</a>
                                           </li>
                                           <li class="nav-item">
-                                            <a class="nav-link" href="#product">Job</a>
+                                            <a class="nav-link" href="#">Job</a>
                                           </li>
                                           <li class="nav-item">
-                                            <a class="nav-link" href="#about-us">Event</a>
+                                            <a class="nav-link" href="#">Event</a>
                                           </li>
                                         </ul>
                                       </div>
@@ -76,9 +76,16 @@
                             </div>   
                             <hr>
                             <div class="like-comment-area">
-                                <button><img src="{{asset('image/like.png')}}" alt=""> {{$post->upvotes}} Upvote</button>
-                                <button><img src="{{asset('image/like.png')}}" alt=""> {{$post->downvotes}} Downvote</button>
-                                <button><img src="{{asset('image/comment.png')}}" alt=""> Comment</button>
+                                <form action="{{ route('posts.upvote', $post->post_id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit"><img src="{{ asset('image/like.png') }}" height="20px" alt="upvote"> {{ $post->upvotes }} </button>
+                                </form>
+                                
+                                <form action="{{ route('posts.downvote', $post->post_id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit"><img src="{{ asset('image/dislike.png') }}" height="20px" alt="downvote"> {{ $post->downvotes }}</button>
+                                </form>
+                                <button><img src="{{asset('image/comment.png')}}" height="20px" alt=""> Comment</button>
                             </div>
                             <hr>
                             @endforeach

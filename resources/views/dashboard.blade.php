@@ -5,7 +5,8 @@
 @endpush
 
 @include('nav-bar')
-<div class="container">{{ $user[0]->email }}</div>
+<div class="container">{{ $user[0]->email }}
+    </div>
 
 </section>
 @include('footer')
