@@ -23,10 +23,10 @@
                     @endif
                     @if (Session::has('$user_email'))
                         <a href="{{ route('user.offline', ['id' => Session::get('$user_id')]) }}"><button
-                            class="w-100 btn-1 btn-with-bg text-white">Status</button></a><br />
+                            class="w-100 btn-1 btn-with-bg text-white" style="background-color:#F68B1F; color: white;border:none;">Status</button></a><br />
                     @endif
                             <br>
-                    <a href="{{ route('user.logout') }}"><button class="w-100 btn-1 btn-with-bg text-white">Log
+                    <a href="{{ route('user.logout') }}"><button class="w-100 btn-1 btn-with-bg text-white" style="background-color:#F68B1F; color: white;border:none;">Log
                             Out</button></a><br />
 
                 </div>

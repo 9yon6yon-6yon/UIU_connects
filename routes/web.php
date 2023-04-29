@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\EventsController;
+use App\Http\Controllers\JobsController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -29,24 +31,26 @@ Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('
 
 Route::get('/user',[UserController::class,'allinfo'])->name('user.dashboard');
 Route::get('/user/{id}',[UserController::class,'profile'])->name('user.profile');
-
+Route::get('/create-post',function(){
+    return view('post-job');
+})->name('create-post');
 Route::get('/posts',[PostsController::class,'index'])->name('user.posts');
-Route::post('/posts',[PostsController::class,'store']);
-Route::get('/posts/view/{id}',[PostsController::class,'show']);
-Route::get('/posts/edit/{id}',[PostsController::class,'edit']);
-Route::put('/posts/update/{id}',[PostsController::class,'update']);
-Route::delete('/posts/delete/{id}',[PostsController::class,'destroy']);
-
+Route::post('/posts',[PostsController::class,'store'])->name('user.post');
+Route::get('/posts/view/{id}',[PostsController::class,'show'])->name('view.p.post');
+Route::get('/posts/edit/{id}',[PostsController::class,'edit'])->name('edit.p.post');
+Route::put('/posts/update/{id}',[PostsController::class,'update'])->name('update.p.post');
+Route::delete('/posts/delete/{id}',[PostsController::class,'destroy'])->name('delete.p.post');
 Route::post('/posts/{id}/upvote', [PostsController::class, 'upvote'])->name('posts.upvote');
 Route::post('/posts/{id}/downvote', [PostsController::class, 'downvote'])->name('posts.downvote');
 
-
+Route::get('/job',[JobsController::class,'store'])->name('jobs.store');
+Route::get('/event',[EventsController::class,'store'])->name('events.store');
 Route::get('/settings', function(){
     return view('settings');
 })->name('user.settings');
 Route::get('/settings/logout',[UserController::class,'logout'])->name('user.logout');
 Route::get('/settings/offline/{id?}',[UserController::class,'logout'])->name('user.offline');
-Route::get('/search/{key?}',[UserController::class,'searchUsers'])->name('user.search');
+Route::get('/search',[UserController::class,'searchUsers'])->name('user.search');
 Route::get('/profile/{id}',[UserController::class,'personalInfo'])->name('user.profile.all');
-// Route::post('/follow/{id}', 'FollowController@follow')->name('follow.follow');
-// Route::delete('/unfollow/{id}', 'FollowController@unfollow')->name('follow.unfollow');
+
+Route::get('/follow/{id}', [UserController::class,'follows'])->name('follow');

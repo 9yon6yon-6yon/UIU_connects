@@ -70,7 +70,6 @@ class UserController extends Controller
     public function allinfo()
     {
         $id =  Session::get('$user_id');
-        //$user = DB::select('select * from users where u_id=?', [$id]);
         $user = DB::table('users')
             ->leftJoin('awards', 'users.u_id', '=', 'awards.user_id')
             ->leftJoin('certificates', 'users.u_id', '=', 'certificates.user_id')
@@ -93,7 +92,7 @@ class UserController extends Controller
         JOIN users ON follows.following = users.u_id 
         JOIN personal_infos ON users.u_id = personal_infos.user_id 
         WHERE follows.follower =$id");
-        
+
 
         return view('dashboard', compact('user', 'following'));
     }
@@ -172,19 +171,20 @@ class UserController extends Controller
             $email = Session::get('$user_email');
             DB::update("UPDATE `users` SET `is_active`=? WHERE `email`= '$email';", [0]);
             Session::flush();
-            return redirect()->route('user-login')->with('success', 'Logged out successfully!');
+            return view('index');
         }
     }
-    public function searchUsers($key = null)
+    public function searchUsers(Request $request)
     {
+        $key = $request->input('key');
         if ($key) {
-            $user = DB::table('users')
-                ->join('personal_infos', 'users.u_id', '=', 'personal_infos.user_id')
-                ->where('users.email', 'like', '%' . $key . '%')
-                ->orWhere('personal_infos.userName', 'like', '%' . $key . '%')
-                ->select('users.*', 'personal_infos.*')
-                ->get();
-            return response()->json(['users' => $user]);
+                $user = DB::table('users')
+                    ->join('personal_infos', 'users.u_id', '=', 'personal_infos.user_id')
+                    ->where('users.email', 'like', '%' . $key . '%')
+                    ->orWhere('personal_infos.userName', 'like', '%' . $key . '%')
+                    ->select('users.*', 'personal_infos.*')
+                    ->get();
+                return response()->json(['users' => $user]);
         } else {
             return view('search');
         }
@@ -192,5 +192,16 @@ class UserController extends Controller
     public function personalInfo($id)
     {
         return view('profile');
+    }
+    public function follow($id){
+        $followerid =  Session::get('$user_id');
+        DB::table('follows')->insert([
+            'follower' => $followerid,
+            'following' => $id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    
+        return response()->json(['success' => true]);
     }
 }

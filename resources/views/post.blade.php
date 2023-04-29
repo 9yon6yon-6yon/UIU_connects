@@ -19,8 +19,7 @@
                             <p>Student, UIU </p>
                         </div>
                         <div class="user-button">
-                          <button class="post-btn">Post</button>
-                            <button class="message-btn">Message</button>
+                        <a href="{{route('create-post')}}"> <button class="post-btn">Post</button></a> 
                             <a href="{{route('user.profile.all',['id' => Session::get('$user_id')])}}"><button class="edit-profile-btn">Edit Profile</button></a>
                         </div>
                     </div>
