@@ -72,23 +72,30 @@ class UserController extends Controller
         $id =  Session::get('$user_id');
         //$user = DB::select('select * from users where u_id=?', [$id]);
         $user = DB::table('users')
-        ->leftJoin('awards', 'users.u_id', '=', 'awards.user_id')
-        ->leftJoin('certificates', 'users.u_id', '=', 'certificates.user_id')
-        ->leftJoin('contacts', 'users.u_id', '=', 'contacts.user_id')
-        ->leftJoin('education', 'users.u_id', '=', 'education.user_id')
-        ->leftJoin('experiences', 'users.u_id', '=', 'experiences.user_id')
-        ->leftJoin('follows', 'users.u_id', '=', 'follower')
-        ->leftJoin('interests', 'users.u_id', '=', 'interests.user_id')
-        ->leftJoin('projects', 'users.u_id', '=', 'projects.user_id')
-        ->leftJoin('personal_infos', 'users.u_id', '=', 'personal_infos.user_id')
-        ->leftJoin('publications', 'users.u_id', '=', 'publications.user_id')
-        ->leftJoin('skills', 'users.u_id', '=', 'skills.user_id')
-        ->leftJoin('testimonials', 'users.u_id', '=', 'testimonials.user_id')
-        ->leftJoin('volunteer_works', 'users.u_id', '=', 'volunteer_works.user_id')
-        ->select('users.*', 'awards.award_name', 'certificates.certification_name', 'contacts.phone', 'education.degree', 'experiences.position', 'follows.follower', 'interests.interest_name', 'projects.project_name', 'personal_infos.userName', 'personal_infos.fathersName', 'personal_infos.mothersName', 'personal_infos.image_path', 'personal_infos.dob', 'personal_infos.nationality', 'personal_infos.address', 'publications.title', 'skills.skill_name', 'testimonials.source', 'volunteer_works.organization')
-        ->where('users.u_id', '=', $id)
-        ->get();//this is now working properly and IDK why
-        return view('dashboard', compact('user')); 
+            ->leftJoin('awards', 'users.u_id', '=', 'awards.user_id')
+            ->leftJoin('certificates', 'users.u_id', '=', 'certificates.user_id')
+            ->leftJoin('contacts', 'users.u_id', '=', 'contacts.user_id')
+            ->leftJoin('education', 'users.u_id', '=', 'education.user_id')
+            ->leftJoin('experiences', 'users.u_id', '=', 'experiences.user_id')
+            ->leftJoin('follows', 'users.u_id', '=', 'follower')
+            ->leftJoin('interests', 'users.u_id', '=', 'interests.user_id')
+            ->leftJoin('projects', 'users.u_id', '=', 'projects.user_id')
+            ->leftJoin('personal_infos', 'users.u_id', '=', 'personal_infos.user_id')
+            ->leftJoin('publications', 'users.u_id', '=', 'publications.user_id')
+            ->leftJoin('skills', 'users.u_id', '=', 'skills.user_id')
+            ->leftJoin('testimonials', 'users.u_id', '=', 'testimonials.user_id')
+            ->leftJoin('volunteer_works', 'users.u_id', '=', 'volunteer_works.user_id')
+            ->select('users.*', 'awards.award_name', 'certificates.certification_name', 'contacts.phone', 'education.degree', 'experiences.position', 'follows.follower', 'interests.interest_name', 'projects.project_name', 'personal_infos.userName', 'personal_infos.fathersName', 'personal_infos.mothersName', 'personal_infos.image_path', 'personal_infos.dob', 'personal_infos.nationality', 'personal_infos.address', 'publications.title', 'skills.skill_name', 'testimonials.source', 'volunteer_works.organization')
+            ->where('users.u_id', '=', $id)
+            ->get(); //this is now working properly and IDK why
+        $following = DB::select("SELECT users.u_id, personal_infos.userName, personal_infos.image_path 
+        FROM follows 
+        JOIN users ON follows.following = users.u_id 
+        JOIN personal_infos ON users.u_id = personal_infos.user_id 
+        WHERE follows.follower =$id");
+        
+
+        return view('dashboard', compact('user', 'following'));
     }
     public function forgetPageView()
     {
