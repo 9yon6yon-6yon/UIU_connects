@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Events;
+use App\Models\Jobs;
 use App\Models\Posts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class PostsController extends Controller
 {
@@ -14,7 +17,11 @@ class PostsController extends Controller
     public function index()
     {
         $posts = Posts::orderBy('created_at', 'desc')->get();
-        return view('post', compact('posts'));
+        $jobs = Jobs::orderBy('created_at', 'desc')->get();
+        $events = Events::orderByRaw('ABS(DATEDIFF(event_date, NOW())) ASC')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        return view('post', compact('posts', 'jobs', 'events'));
     }
 
     /**
@@ -30,7 +37,26 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $id = Session::get('$user_id');
+        if ($request->hasFile('file_path')) {
+            $file = $request->file('file_path');
+            $path = $file->store('public/files');
+        } else {
+            $path = null;
+        }
+        $path = str_replace('public/files/', '', $path);
+        DB::table('posts')->insert([
+            'user_id' =>  $id,
+            'post_title' => $request->title,
+            'content' => $request->details,
+            'files' => $path,
+            'upvotes' => 0,
+            'downvotes' => 0,
+            'created_at' => now(),
+            'updated_at' => now(),
+
+        ]);
+        return redirect()->back()->with('success', 'Post has been uploaded successfully');
     }
 
     /**
@@ -66,13 +92,67 @@ class PostsController extends Controller
     }
     public function upvote($id)
     {
-        DB::update("UPDATE posts SET upvotes = upvotes + 1 WHERE post_id = $id;");
+        $user_id = Session::get('$user_id');
+
+        // Check if the user has already upvoted this post
+        $existing_vote = DB::table('votes')
+            ->where('user_id', $user_id)
+            ->where('pst_id', $id)
+            ->where('type', 'upvote')
+            ->first();
+
+        if ($existing_vote) {
+            // The user has already upvoted, so cancel their vote
+            DB::table('votes')
+                ->where('user_id', $user_id)
+                ->where('pst_id', $id)
+                ->delete();
+            DB::update("UPDATE posts SET upvotes = upvotes - 1 WHERE post_id = $id;");
+        } else {
+            // The user has not upvoted, so add their vote
+            DB::table('votes')->insert([
+                'user_id' => $user_id,
+                'pst_id' => $id,
+                'type' => 'upvote',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            DB::update("UPDATE posts SET upvotes = upvotes + 1 WHERE post_id = $id;");
+        }
+
         return redirect()->back();
     }
 
     public function downvote($id)
     {
-        DB::update("UPDATE posts SET downvotes = downvotes + 1 WHERE post_id = $id;");
+        $user_id = Session::get('$user_id');
+
+        // Check if the user has already downvoted this post
+        $existing_vote = DB::table('votes')
+            ->where('user_id', $user_id)
+            ->where('pst_id', $id)
+            ->where('type', 'downvote')
+            ->first();
+
+        if ($existing_vote) {
+            // The user has already downvoted, so cancel their vote
+            DB::table('votes')
+                ->where('user_id', $user_id)
+                ->where('pst_id', $id)
+                ->delete();
+            DB::update("UPDATE posts SET downvotes = downvotes - 1 WHERE post_id = $id;");
+        } else {
+            // The user has not downvoted, so add their vote
+            DB::table('votes')->insert([
+                'user_id' => $user_id,
+                'pst_id' => $id,
+                'type' => 'downvote',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            DB::update("UPDATE posts SET downvotes = downvotes + 1 WHERE post_id = $id;");
+        }
+
         return redirect()->back();
     }
 }
