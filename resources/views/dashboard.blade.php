@@ -5,7 +5,7 @@
 @endpush
 
 @include('nav-bar')
-<div class="container">
+<div class="container" style="margin-top: 10px;">
 
     <div class="sticky-top">
         <nav class="navbar navbar-expand-lg navbar-light  bg-light">
@@ -25,7 +25,7 @@
                             <a class="nav-link" href="#" onclick="showSection('Awards')">Awards</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" onclick="showSection('Follows')">Follows</a>
+                            <a class="nav-link" href="#" onclick="showSection('Follows')">Following</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link " aria-current="page" href="#"
@@ -129,16 +129,16 @@
     </div>
     <div id="Follows-section" class="content-section" style="display:none">
         <div class="row">
-            @foreach($following as $user)
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <img src="{{ $user->image_path }}" class="card-img-top" alt="Profile Picture">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ $user->userName }}</h5>
+            @foreach ($following as $user)
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <img src="{{ $user->image_path }}" class="card-img-top" alt="Profile Picture">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $user->userName }}</h5>
+                        </div>
                     </div>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
         </div>
     </div>
     <div id="Experiences-section" class="content-section"></div>
@@ -156,6 +156,18 @@
 </section>
 
 <script>
+    const menuItems = document.querySelectorAll('.nav-item');
+
+    menuItems.forEach(item => {
+        item.addEventListener('click', () => {
+            // remove "active" class from all menu items
+            menuItems.forEach(item => item.querySelector('a').classList.remove('active'));
+
+            // add "active" class to the clicked menu item
+            item.querySelector('a').classList.add('active');
+        });
+    });
+
     function showSection(sectionName) {
 
         var contentSections = document.getElementsByClassName("content-section");
