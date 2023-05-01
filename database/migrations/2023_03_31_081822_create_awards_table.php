@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id('awrd_id')->autoIncrement();
             $table->unsignedBigInteger('user_id');
             $table->string('award_name');
-            $table->date('date_received');
-            $table->text('description');
+            $table->date('award_received');
+            $table->text('award_description');
             $table->timestamps();
             $table->foreign('user_id')->references('u_id')->on('users')->onDelete('cascade');
 

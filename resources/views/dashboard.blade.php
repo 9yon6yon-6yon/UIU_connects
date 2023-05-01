@@ -91,40 +91,48 @@
                 </div>
             </div>
         </form>
-
     </div>
     <div id="Awards-section" class="content-section" style="display:none">
         <div class="container">
-            <h2>Awards</h2>
             <table class="table">
                 <thead>
                     <tr>
-
                         <th>Award Name</th>
                         <th>Date Received</th>
                         <th>Description</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach ($user as $data)
+                <tbody id="awards-table">
+                    @foreach ($user as $award)
                         <tr>
-                            <td><input type="text" value="{{ $data->award_name }}"></td>
-
-                            @if (isset($data->date_received))
-                                <td><input type="text" value="{{ $data->date_received }}"> </td>
-                            @else
-                                <td>N/A</td>
-                            @endif
-
-                            @if (isset($data->date_received))
-                                <td><input type="text" value="{{ $data->description }}"></td>
-                            @else
-                                <td>N/A</td>
-                            @endif
+                            <td><input type="text" name="award_name" value="{{ $award->award_name }}" disabled>
+                            </td>
+                            <td><input type="text" name="date_received"
+                                    value="{{ $award->award_received ?? 'N/A' }}" disabled> </td>
+                            <td><input type="text" name="description"
+                                    value="{{ $award->award_description ?? 'N/A' }}" disabled> </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+            <br>
+
+            <form action="{{ route('user.addAward') }}" method="POST">
+                @csrf
+                <div class="mb-3">
+                    <label for="award_name" class="form-label">Award Name</label>
+                    <input type="text" class="form-control" id="award_name" name="award_name">
+                </div>
+                <div class="mb-3">
+                    <label for="date_received" class="form-label">Date Received</label>
+                    <input type="date" class="form-control" id="date_received" name="date_received">
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Award</button>
+            </form>
         </div>
     </div>
     <div id="Follows-section" class="content-section" style="display:none">
@@ -132,7 +140,8 @@
             @foreach ($following as $user)
                 <div class="col-md-4 mb-3">
                     <div class="card">
-                        <img src="{{ $user->image_path }}" class="card-img-top" alt="Profile Picture">
+                        <img src="{{ asset('/storage/files/' . $user->image_path) }}" class="card-img-top"
+                            alt="Profile Picture">
                         <div class="card-body">
                             <h5 class="card-title">{{ $user->userName }}</h5>
                         </div>
@@ -141,15 +150,132 @@
             @endforeach
         </div>
     </div>
-    <div id="Experiences-section" class="content-section"></div>
-    <div id="Certificates-section" class="content-section"></div>
-    <div id="Skills-section" class="content-section"></div>
-    <div id="Education-section" class="content-section"></div>
-    <div id="Testimonials-section" class="content-section"></div>
-    <div id="About-section" class="content-section"></div>
-    <div id="Volunteer-section" class="content-section"></div>
-    <div id="Publications-section" class="content-section"></div>
-    <div id="Interests-section" class="content-section"></div>
+    <div id="Experiences-section" class="content-section" style="display:none">
+        <table id="experiences-table">
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Position</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($user as $experience)
+                    <tr>
+                        <td><input type="text" name="company" value="{{ $experience->company }}"></td>
+                        <td><input type="text" name="title" value="{{ $experience->position }}"></td>
+                        <td><input type="date" name="start_date" value="{{ $experience->joining_date }}"></td>
+                        <td><input type="date" name="end_date" value="{{ $experience->retired_date }}"></td>
+                        <td><input type="text" name="description" value="{{ $experience->description }}"></td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    <div id="Certificates-section" class="content-section" style="display:none">
+
+    </div>
+    <div id="Skills-section" class="content-section" style="display:none">
+
+    </div>
+    <div id="Education-section" class="content-section" style="display:none">
+
+    </div>
+    <div id="Testimonials-section" class="content-section" style="display:none">
+
+    </div>
+    <div id="About-section" class="content-section" style="display:none">
+
+        <div class="card">
+            <div class="card-body">
+                <form action="{{ route('user.addAbout') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 class="card-title">Personal Info</h5>
+                            <div class="form-group">
+                                <label for="userName">User Name</label>
+                                <input type="text" class="form-control" id="userName" name="userName"
+                                    value="{{ $info->userName }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="fathersName">Father's Name</label>
+                                <input type="text" class="form-control" id="fathersName" name="fathersName"
+                                    value="{{ $info->fathersName }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="mothersName">Mother's Name</label>
+                                <input type="text" class="form-control" id="mothersName" name="mothersName"
+                                    value="{{ $info->mothersName }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="image_path">Image Path</label>
+                                <input type="file" class="form-control" id="image_path" name="image_path"
+                                    value="{{ asset('/storage/files/'.$info->image_path) }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="dob">Date of Birth</label>
+                                <input type="date" class="form-control" id="dob" name="dob"
+                                    value="{{ $info->dob }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="nationality">Nationality</label>
+                                <input type="text" class="form-control" id="nationality" name="nationality"
+                                    value="{{ $info->nationality }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <input type="text" class="form-control" id="status" name="status"
+                                    value="{{ $info->status }}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="card-title">Contact Info</h5>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" id="email" name="email"
+                                    value="{{ $info->email }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone</label>
+                                <input type="tel" class="form-control" id="phone" name="phone"
+                                    value="{{ $info->phone }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="others">Others</label>
+                                <textarea class="form-control" id="others" name="others">{{ $info->others }}</textarea>
+                            </div>
+                           
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <textarea class="form-control" id="address" name="address">{{ $info->address }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <div id="Volunteer-section" class="content-section" style="display:none">
+
+    </div>
+    <div id="Publications-section" class="content-section" style="display:none">
+
+    </div>
+    <div id="Interests-section" class="content-section" style="display:none">
+
+    </div>
 
 </div>
 

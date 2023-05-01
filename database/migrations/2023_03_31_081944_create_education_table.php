@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('degree', 255);
             $table->string('field_of_study', 255);
             $table->date('graduation_date');
-            $table->text('description');
+            $table->text('education_description');
             $table->timestamps();
             $table->foreign('user_id')->references('u_id')->on('users')->onDelete('cascade');
         });

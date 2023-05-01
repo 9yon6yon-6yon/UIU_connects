@@ -77,3 +77,15 @@ Route::view('chat','chat');
 Route::post('/chat',[ChatController::class,'index'])->name('chat.dashboard');
 Route::get('/chat/{user}', [ChatController::class,'show'])->name('chat.show');
 Route::post('/chat/{user}', [ChatController::class,'store'])->name('chat.store');
+
+//extended profiles
+Route::post('/user/award', [UserController::class,'addAward'])->name('user.addAward');
+Route::post('/user/experiences', [UserController::class,'addExperiences'])->name('user.addExperiences');
+Route::post('/user/certificates', [UserController::class,'addCertificates'])->name('user.addCertificates');
+Route::post('/user/skills', [UserController::class,'addSkills'])->name('user.addSkills');
+Route::post('/user/education', [UserController::class,'addEducation'])->name('user.addEducation');
+Route::post('/user/testimonials', [UserController::class,'addTestimonials'])->name('user.addTestimonials');
+Route::post('/user/about', [UserController::class,'addAbout'])->name('user.addAbout');
+Route::post('/user/volunteer-works', [UserController::class,'addVolunteerWorks'])->name('user.addVolunteerWorks');
+Route::post('/user/interests', [UserController::class,'addInterests'])->name('user.addInterests');
+

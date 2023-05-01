@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('company', 255);
             $table->string('position', 255);
-            $table->date('start_date');
-            $table->date('end_date')->nullable();
+            $table->date('joining_date');
+            $table->date('retired_date')->nullable();
             $table->text('description');
             $table->timestamps();
             $table->foreign('user_id')->references('u_id')->on('users')->onDelete('cascade');

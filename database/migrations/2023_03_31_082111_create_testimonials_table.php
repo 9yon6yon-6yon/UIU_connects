@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('testimonial_id')->autoIncrement();
             $table->unsignedBigInteger('user_id');
             $table->string('source');
-            $table->date('date_received');
+            $table->date('testimonial_received');
             $table->string('phone', 25);
             $table->text('quote');
             $table->timestamps();

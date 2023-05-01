@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('publications', function (Blueprint $table) {
             $table->id('pub_id')->autoIncrement();
             $table->unsignedBigInteger('user_id');
-            $table->string('title');
+            $table->string('publication_title');
             $table->string('publisher');
             $table->date('publication_date');
             $table->text('citation');

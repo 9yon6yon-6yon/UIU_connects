@@ -79,12 +79,11 @@ class UserController extends Controller
             ->leftJoin('follows', 'users.u_id', '=', 'follower')
             ->leftJoin('interests', 'users.u_id', '=', 'interests.user_id')
             ->leftJoin('projects', 'users.u_id', '=', 'projects.user_id')
-            ->leftJoin('personal_infos', 'users.u_id', '=', 'personal_infos.user_id')
             ->leftJoin('publications', 'users.u_id', '=', 'publications.user_id')
             ->leftJoin('skills', 'users.u_id', '=', 'skills.user_id')
             ->leftJoin('testimonials', 'users.u_id', '=', 'testimonials.user_id')
             ->leftJoin('volunteer_works', 'users.u_id', '=', 'volunteer_works.user_id')
-            ->select('users.*', 'awards.award_name', 'certificates.certification_name', 'contacts.phone', 'education.degree', 'experiences.position', 'follows.follower', 'interests.interest_name', 'projects.project_name', 'personal_infos.userName', 'personal_infos.fathersName', 'personal_infos.mothersName', 'personal_infos.image_path', 'personal_infos.dob', 'personal_infos.nationality', 'personal_infos.address', 'publications.title', 'skills.skill_name', 'testimonials.source', 'volunteer_works.organization')
+            ->select('users.*', 'awards.*', 'certificates.*', 'contacts.phone', 'education.*', 'experiences.*', 'follows.*', 'interests.*', 'projects.*', 'publications.*', 'skills.*', 'testimonials.*', 'volunteer_works.*')
             ->where('users.u_id', '=', $id)
             ->get(); //this is now working properly and IDK why
         $following = DB::select("SELECT users.u_id, personal_infos.userName, personal_infos.image_path 
@@ -92,9 +91,13 @@ class UserController extends Controller
         JOIN users ON follows.following = users.u_id 
         JOIN personal_infos ON users.u_id = personal_infos.user_id 
         WHERE follows.follower =$id");
+        $info = DB::table('users')
+            ->leftJoin('contacts', 'users.u_id', '=', 'contacts.user_id')
+            ->leftJoin('personal_infos', 'users.u_id', '=', 'personal_infos.user_id')
+            ->select('users.u_id', 'users.user_type', 'users.is_active', 'contacts.*', 'personal_infos.*')
+            ->first();
 
-
-        return view('dashboard', compact('user', 'following'));
+        return view('dashboard', compact('user', 'following', 'info'));
     }
     public function forgetPageView()
     {
@@ -192,7 +195,13 @@ class UserController extends Controller
     }
     public function personalInfo($id)
     {
-        return view('profile');
+        $user= DB::table('users')
+            ->leftJoin('contacts', 'users.u_id', '=', 'contacts.user_id')
+            ->leftJoin('personal_infos', 'users.u_id', '=', 'personal_infos.user_id')
+            ->where('users.u_id', $id)
+            ->select('users.u_id', 'users.user_type', 'users.is_active', 'contacts.*', 'personal_infos.*')
+            ->first();
+        return view('profile')>with(compact('user'));
     }
     public function follows($id)
     {
@@ -216,5 +225,51 @@ class UserController extends Controller
 
             return redirect()->back()->with('success', 'You have followed the user successfully!');
         }
+    }
+    public function addAward(Request $request)
+    {
+        $id = Session::get('$user_id');
+        $validatedData = $request->validate([
+            'award_name' => 'required',
+            'date_received' => 'nullable|date',
+            'description' => 'nullable',
+        ]);
+
+        // Add the award to the database
+        DB::table('awards')->insert([
+            'user_id' =>  $id,
+            'award_name' => $request->award_name,
+            'award_received' => $request->date_received,
+            'award_description' => $request->description,
+            'created_at' => now(),
+            'updated_at' => now(),
+
+        ]);
+
+        return redirect()->back()->with('success', 'Award added successfully!');
+    }
+    public function addExperiences(Request $request)
+    {
+    }
+    public function addCertificates(Request $request)
+    {
+    }
+    public function addSkills(Request $request)
+    {
+    }
+    public function addEducation(Request $request)
+    {
+    }
+    public function addTestimonials(Request $request)
+    {
+    }
+    public function addAbout(Request $request)
+    {
+    }
+    public function addVolunteerWorks(Request $request)
+    {
+    }
+    public function addInterests(Request $request)
+    {
     }
 }
