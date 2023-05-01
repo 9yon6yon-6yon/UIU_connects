@@ -8,10 +8,17 @@
 @include('nav-bar')
 
 <div class="container pt-3">
+    @if(Session::has('success'))
+    <p class="alert alert-success">{{ Session::get('success') }}</p>
+    @elseif(Session::has('error'))
+        <p class="alert alert-warning">{{ Session::get('error') }}</p>
+    @endif
     <form id="post-form" method="POST" enctype="multipart/form-data">
+        {{ csrf_field() }}
         <div class="form-group">
             <label for="post-type">Post type:</label>
-            <select id="post-type" class="form-control" onchange="updateFields()" name="post_type">
+            <select id="post-type" class="form-control" onchange="updateFields()" name="post_type" required>
+                <option value="">--</option>
                 <option value="event">Event</option>
                 <option value="job">Job</option>
                 <option value="general">General</option>
@@ -19,7 +26,7 @@
         </div>
         <div class="form-group">
             <label for="post-title">Title:</label>
-            <input type="text" class="form-control" id="post-title" name="title">
+            <input type="text" class="form-control" id="post-title" name="title" required>
         </div>
         <div class="form-group">
             <label for="post-details">Details:</label>
@@ -27,11 +34,11 @@
         </div>
         <div class="form-group">
             <label for="post-files">Files/Images:</label>
-            <input type="file" class="form-control" id="post-files" name="file">
+            <input type="file" class="form-control" id="post-files" name="file_path">
         </div>
         <div class="form-group" id="event-date-group">
             <label for="event-date" id="event-date-label">Event date:</label>
-            <input type="date" class="form-control" id="event-date" name="event_date">
+            <input type="date" class="form-control" id="event-date" name="eventdate">
         </div>
   
         <button type="submit" class="btn btn-primary" style="background-color:#F68B1F; color: white;border:none;">Submit</button>
@@ -49,7 +56,7 @@
             form.action = "{{ route('user.post') }}";
         } else if (postTypeSelect.value === "job") {
             form.action = "{{ route('jobs.store') }}";
-        } else if (postTypeSelect.value === "event") {
+        } else if (postTypeSelect.value === "event"){
             form.action = "{{ route('events.store') }}";
         }
     });
