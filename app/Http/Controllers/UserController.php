@@ -178,13 +178,14 @@ class UserController extends Controller
     {
         $key = $request->input('key');
         if ($key) {
-                $user = DB::table('users')
-                    ->join('personal_infos', 'users.u_id', '=', 'personal_infos.user_id')
-                    ->where('users.email', 'like', '%' . $key . '%')
-                    ->orWhere('personal_infos.userName', 'like', '%' . $key . '%')
-                    ->select('users.*', 'personal_infos.*')
-                    ->get();
-                return response()->json(['users' => $user]);
+            $user = DB::table('users')
+                ->join('personal_infos', 'users.u_id', '=', 'personal_infos.user_id')
+                ->leftJoin('contacts', 'users.u_id', '=', 'contacts.user_id')
+                ->where('users.email', 'like', '%' . $key . '%')
+                ->orWhere('personal_infos.userName', 'like', '%' . $key . '%')
+                ->select('users.*', 'personal_infos.*', 'contacts.phone')
+                ->get();
+            return response()->json(['users' => $user]);
         } else {
             return view('search');
         }
@@ -193,15 +194,27 @@ class UserController extends Controller
     {
         return view('profile');
     }
-    public function follow($id){
-        $followerid =  Session::get('$user_id');
-        DB::table('follows')->insert([
-            'follower' => $followerid,
-            'following' => $id,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-    
-        return response()->json(['success' => true]);
+    public function follows($id)
+    {
+        $followerid = Session::get('$user_id');
+
+        // check if the user is already following
+        $existingFollow = DB::table('follows')
+            ->where('follower', $followerid)
+            ->where('following', $id)
+            ->first();
+
+        if ($existingFollow) {
+            return redirect()->back()->with('error', 'You are already following this user!');
+        } else {
+            DB::table('follows')->insert([
+                'follower' => $followerid,
+                'following' => $id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            return redirect()->back()->with('success', 'You have followed the user successfully!');
+        }
     }
 }

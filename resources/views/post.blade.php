@@ -52,7 +52,12 @@
                                         </div>
                                     </div>
                                     <div class="poster-post">
-                                        <p>{{ $post->content }}</p>
+                                        <p>{{ Str::limit($post->content, $limit = 200, $end = '...') }}
+                                            @if (strlen($post->content) > 200)
+                                                <a href="{{ route('view.p.post', ['id' => $post->post_id]) }}">See
+                                                    more</a>
+                                            @endif
+                                        </p>
 
                                     </div>
 

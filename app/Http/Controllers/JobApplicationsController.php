@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\JobApplications;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class JobApplicationsController extends Controller
 {
@@ -28,7 +30,7 @@ class JobApplicationsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       
     }
 
     /**

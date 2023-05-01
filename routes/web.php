@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\JobsController;
 use App\Http\Controllers\PostsController;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('index');
 });
+//user functionality 
 Route::get('/login', [UserController::class, 'login'])->name('user-login');
 Route::post('/login', [UserController::class, 'loginCheck']);
 Route::get('/signup', [UserController::class, 'register'])->name('user-sign-up');
@@ -34,17 +36,33 @@ Route::get('/user/{id}',[UserController::class,'profile'])->name('user.profile')
 Route::get('/create-post',function(){
     return view('post-job');
 })->name('create-post');
+//post routes for general posts
 Route::get('/posts',[PostsController::class,'index'])->name('user.posts');
 Route::post('/posts',[PostsController::class,'store'])->name('user.post');
 Route::get('/posts/view/{id}',[PostsController::class,'show'])->name('view.p.post');
+Route::post('/posts/view/{id}',[PostsController::class,'comment'])->name('add.comment');//comment function
 Route::get('/posts/edit/{id}',[PostsController::class,'edit'])->name('edit.p.post');
 Route::put('/posts/update/{id}',[PostsController::class,'update'])->name('update.p.post');
 Route::delete('/posts/delete/{id}',[PostsController::class,'destroy'])->name('delete.p.post');
-Route::post('/posts/{id}/upvote', [PostsController::class, 'upvote'])->name('posts.upvote');
-Route::post('/posts/{id}/downvote', [PostsController::class, 'downvote'])->name('posts.downvote');
+Route::get('/posts/{id}/upvote', [PostsController::class, 'upvote'])->name('posts.upvote');
+Route::get('/posts/{id}/downvote', [PostsController::class, 'downvote'])->name('posts.downvote');
+//post routes for job posts
+Route::get('/job',[JobsController::class,'index'])->name('jobs.view');
+Route::post('/job',[JobsController::class,'store'])->name('jobs.store');
+Route::get('/job/view/{id}',[JobsController::class,'show'])->name('view.p.job');
+Route::post('/job/view/{id}',[JobsController::class,'applyforjob'])->name('apply.job');
+Route::get('/job/edit/{id}',[JobsController::class,'edit'])->name('edit.p.job');
+Route::put('/job/update/{id}',[JobsController::class,'update'])->name('update.p.job');
+Route::delete('/job/delete/{id}',[JobsController::class,'destroy'])->name('delete.p.job');
+//post routes for event posts
+Route::get('/event',[EventsController::class,'index'])->name('events.view');
+Route::post('/event',[EventsController::class,'store'])->name('events.store');
+Route::get('/event/view/{id}',[EventsController::class,'show'])->name('view.p.event');
+Route::get('/event/edit/{id}',[EventsController::class,'edit'])->name('edit.p.event');
+Route::put('/event/update/{id}',[EventsController::class,'update'])->name('update.p.event');
+Route::delete('/event/delete/{id}',[EventsController::class,'destroy'])->name('delete.p.event');
 
-Route::get('/job',[JobsController::class,'store'])->name('jobs.store');
-Route::get('/event',[EventsController::class,'store'])->name('events.store');
+//extended functions for other features
 Route::get('/settings', function(){
     return view('settings');
 })->name('user.settings');
@@ -54,3 +72,8 @@ Route::get('/search',[UserController::class,'searchUsers'])->name('user.search')
 Route::get('/profile/{id}',[UserController::class,'personalInfo'])->name('user.profile.all');
 
 Route::get('/follow/{id}', [UserController::class,'follows'])->name('follow');
+//chat functions
+Route::view('chat','chat');
+Route::post('/chat',[ChatController::class,'index'])->name('chat.dashboard');
+Route::get('/chat/{user}', [ChatController::class,'show'])->name('chat.show');
+Route::post('/chat/{user}', [ChatController::class,'store'])->name('chat.store');

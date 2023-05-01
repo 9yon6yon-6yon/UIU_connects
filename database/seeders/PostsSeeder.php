@@ -15,7 +15,7 @@ class PostsSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create();
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             DB::table('posts')->insert(
                 [
                     'user_id' => '1',

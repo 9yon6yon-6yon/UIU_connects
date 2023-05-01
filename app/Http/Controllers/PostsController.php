@@ -62,9 +62,32 @@ class PostsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Posts $posts)
+    public function show($id)
     {
-        //
+        $post = DB::table('posts')
+            ->select('posts.*')
+            ->where('posts.post_id', '=', $id)
+            ->first();
+
+        $user = DB::table('users')
+            ->select('users.*')
+            ->where('users.u_id', '=', $post->user_id)
+            ->first();
+
+        $personal_info = DB::table('personal_infos')
+            ->where('user_id', '=', $post->user_id)
+            ->first();
+
+        $comments = DB::table('comments')
+            ->join('users', 'comments.user_id', '=', 'users.u_id')
+            ->join('personal_infos', 'users.u_id', '=', 'personal_infos.user_id')
+            ->select('comments.*', 'personal_infos.userName')
+            ->where('pst_id', '=', $id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+
+        return view('post-view', compact('post', 'comments','user','personal_info'));
     }
 
     /**
@@ -154,5 +177,16 @@ class PostsController extends Controller
         }
 
         return redirect()->back();
+    }
+    public function comment(Request $request,$id){
+        $u_id = Session::get('$user_id');
+        DB::table('comments')->insert([
+            'user_id' => $u_id,
+            'pst_id' => $id,
+            'c_details' => $request->c_details,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        return redirect()->back()->with('success', 'Comment stored');
     }
 }

@@ -7,14 +7,18 @@
 
 @include('nav-bar')
 
-<div class="container">
+<div class="container" style="margin-top:10px;">
     <div class="right-side">
         <div class="info-container">
             <div class="search sticky-sm-top">
-                <input type="text" placeholder="   Search here" onkeyup="searchUsers()" id="search-input">
+                <input type="text" placeholder="Search by name or email" onkeyup="searchUsers()" id="search-input">
             </div>
             <div class="container">
-
+                @if(Session::has('success'))
+                <p class="alert alert-success">{{ Session::get('success') }}</p>
+                @elseif(Session::has('error'))
+                    <p class="alert alert-warning">{{ Session::get('error') }}</p>
+                @endif
                 <div class="row row-cols-1 row-cols-md-3 g-4" id="search-results">
 
                 </div>
@@ -52,10 +56,14 @@
                             '</li>' +
                             '<li class="list-group-item"><strong>Nationality:</strong> ' + user
                             .nationality + '</li>' +
+                            '<li class="list-group-item"><strong>Phone:</strong> ' + user
+                            .phone + '</li>' +
                             '</ul>' +
                             '</div>' +
                             '<div class="card-footer">' +
-                            '<a href="#" class="btn btn-primary follow-button" data-user-id="' + user.u_id +
+                            '<a href="{{ route('follow', ['id' => ':id']) }}'.replace(':id', user.u_id) +
+                            '" class="btn btn-primary follow-button" data-user-id="' +
+                            user.u_id +
                             '">Follow</a>' +
                             '</div>' +
                             '</div>' +
@@ -69,31 +77,6 @@
         xhr.open('GET', '{{ route('user.search') }}?key=' + searchKey, true);
         xhr.send();
     }
-
-    $(document).on('click', '.follow-button', function(e) {
-        e.preventDefault();
-        var userId = $(this).data('user-id');
-        var xhr = new XMLHttpRequest();
-        xhr.open('get', '{{ route('follow', ['id' => ':id']) }}'.replace(':id', userId));
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.setRequestHeader('X-CSRF-Token', '{{ csrf_token() }}');
-        xhr.onreadystatechange = function() {
-            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                var response = JSON.parse(this.responseText);
-                if (response.success) {
-                    $(e.target).html('Following');
-                } else {
-                    alert('Error following user');
-                }
-            } else if (this.readyState === XMLHttpRequest.DONE && this.status !== 200) {
-                alert('Error following user');
-            }
-        };
-        xhr.send(JSON.stringify({
-            _token: '{{ csrf_token() }}'
-        }));
-    });
-    
 </script>
 
 @include('footer')
