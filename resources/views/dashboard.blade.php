@@ -94,6 +94,11 @@
     </div>
     <div id="Awards-section" class="content-section" style="display:none">
         <div class="container">
+            @if(Session::has('success'))
+            <p class="alert alert-success">{{ Session::get('success') }}</p>
+            @elseif(Session::has('error'))
+                <p class="alert alert-warning">{{ Session::get('error') }}</p>
+            @endif
             <table class="table">
                 <thead>
                     <tr>
@@ -190,6 +195,11 @@
     <div id="About-section" class="content-section" style="display:none">
 
         <div class="card">
+            @if(Session::has('success'))
+            <p class="alert alert-success">{{ Session::get('success') }}</p>
+            @elseif(Session::has('error'))
+                <p class="alert alert-warning">{{ Session::get('error') }}</p>
+            @endif
             <div class="card-body">
                 <form action="{{ route('user.addAbout') }}" method="POST" enctype="multipart/form-data">
                     @csrf

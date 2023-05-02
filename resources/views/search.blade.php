@@ -14,8 +14,8 @@
                 <input type="text" placeholder="Search by name or email" onkeyup="searchUsers()" id="search-input">
             </div>
             <div class="container">
-                @if(Session::has('success'))
-                <p class="alert alert-success">{{ Session::get('success') }}</p>
+                @if (Session::has('success'))
+                    <p class="alert alert-success">{{ Session::get('success') }}</p>
                 @elseif(Session::has('error'))
                     <p class="alert alert-warning">{{ Session::get('error') }}</p>
                 @endif
@@ -43,7 +43,7 @@
                     response.users.forEach(function(user) {
                         var cardHtml = '<div class="col-md-4 mb-4">' +
                             '<div class="card shadow-sm h-100">' +
-                            '<img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Profile Picture">' +
+                            `<img src="{{ asset('storage/files/`+ user.image_path+`') }}" class="card-img-top" alt="Profile Picture">`+
                             '<div class="card-body ">' +
                             '<div class="card-title">' +
                             '<h2>' + user.userName + '</h2>' +

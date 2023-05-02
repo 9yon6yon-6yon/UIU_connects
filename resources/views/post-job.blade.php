@@ -30,7 +30,7 @@
         </div>
         <div class="form-group">
             <label for="post-details">Details:</label>
-            <input type="text" class="form-control" id="post-details" name="details">
+            <textarea type="text" class="form-control" id="post-details" name="details"></textarea>
         </div>
         <div class="form-group">
             <label for="post-files">Files/Images:</label>

@@ -195,13 +195,13 @@ class UserController extends Controller
     }
     public function personalInfo($id)
     {
-        $user= DB::table('users')
+        $user = DB::table('users')
             ->leftJoin('contacts', 'users.u_id', '=', 'contacts.user_id')
             ->leftJoin('personal_infos', 'users.u_id', '=', 'personal_infos.user_id')
             ->where('users.u_id', $id)
             ->select('users.u_id', 'users.user_type', 'users.is_active', 'contacts.*', 'personal_infos.*')
             ->first();
-        return view('profile')>with(compact('user'));
+        return view('profile')->with(compact('user'));
     }
     public function follows($id)
     {
@@ -265,6 +265,53 @@ class UserController extends Controller
     }
     public function addAbout(Request $request)
     {
+        $id = Session::get('$user_id');
+
+        $validatedData = $request->validate([
+            'userName' => 'required',
+            'fathersName' => 'nullable',
+            'mothersName' => 'nullable',
+            'image_path' => 'required',
+            'dob' => 'required|date',
+            'nationality' => 'required',
+            'status' => 'required',
+            'address' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'others' => 'nullable',
+        ]);
+        if ($request->hasFile('image_path')) {
+            $file = $request->file('image_path');
+            $path = $file->store('public/files');
+        } else {
+            $path = null;
+        }
+        $path = str_replace('public/files/', '', $path);
+        // Upsert data into personal_infos table
+        DB::table('personal_infos')->upsert([
+            'user_id' => $id,
+            'userName' => $request->userName,
+            'fathersName' => $request->fathersName,
+            'mothersName' => $request->mothersName,
+            'image_path' => $path,
+            'dob' => $request->dob,
+            'nationality' => $request->nationality,
+            'status' => $request->status,
+            'address' => $request->address,
+            'updated_at' => now(),
+        ], ['user_id'], ['userName', 'fathersName', 'mothersName', 'image_path', 'dob', 'nationality', 'status', 'address']);
+
+        // Upsert data into contacts table
+        DB::table('contacts')->upsert([
+            'user_id' => $id,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'others' => $request->others,
+            'updated_at' => now(),
+        ], ['user_id'], ['email', 'phone', 'others']);
+
+
+        return redirect()->back()->with('success', 'Profile Updated  successfully!');
     }
     public function addVolunteerWorks(Request $request)
     {
