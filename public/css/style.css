@@ -819,6 +819,21 @@ button {
     margin-left: 10px;
 }
 
+.status-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  
+  .status-dot.active {
+    background-color: green;
+  }
+  
+  .status-dot.inactive {
+    background-color: red;
+  }
+  
 .navbar-nav .nav-link.active {
     background-color: #F68B1F;
     color: white;

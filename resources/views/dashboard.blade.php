@@ -18,8 +18,7 @@
                 <div class="collapse navbar-collapse d-flex justify-content-start" id="navbarNav">
                     <ul class="navbar-nav ">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#"
-                                onclick="showSection('User')">User</a>
+                            <a class="nav-link" href="#" onclick="showSection('User')">User</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" onclick="showSection('Awards')">Awards</a>
@@ -94,8 +93,8 @@
     </div>
     <div id="Awards-section" class="content-section" style="display:none">
         <div class="container">
-            @if(Session::has('success'))
-            <p class="alert alert-success">{{ Session::get('success') }}</p>
+            @if (Session::has('success'))
+                <p class="alert alert-success">{{ Session::get('success') }}</p>
             @elseif(Session::has('error'))
                 <p class="alert alert-warning">{{ Session::get('error') }}</p>
             @endif
@@ -109,14 +108,17 @@
                 </thead>
                 <tbody id="awards-table">
                     @foreach ($user as $award)
-                        <tr>
-                            <td><input type="text" name="award_name" value="{{ $award->award_name }}" disabled>
-                            </td>
-                            <td><input type="text" name="date_received"
-                                    value="{{ $award->award_received ?? 'N/A' }}" disabled> </td>
-                            <td><input type="text" name="description"
-                                    value="{{ $award->award_description ?? 'N/A' }}" disabled> </td>
-                        </tr>
+                        @if ($award->award_name)
+                            <tr>
+                                <td><input type="text" name="award_name" value="{{ $award->award_name }}"
+                                        disabled>
+                                </td>
+                                <td><input type="text" name="date_received"
+                                        value="{{ $award->award_received ?? 'N/A' }}" disabled> </td>
+                                <td><input type="text" name="description"
+                                        value="{{ $award->award_description ?? 'N/A' }}" disabled> </td>
+                            </tr>
+                        @endif
                     @endforeach
                 </tbody>
             </table>
@@ -149,6 +151,8 @@
                             alt="Profile Picture">
                         <div class="card-body">
                             <h5 class="card-title">{{ $user->userName }}</h5>
+                            <p class="card-info">{{ $user->user_type }}</p>
+                            <span class="status-dot {{ $user->is_active == 1 ? 'active' : 'inactive' }}"></span>
                         </div>
                     </div>
                 </div>
@@ -156,49 +160,150 @@
         </div>
     </div>
     <div id="Experiences-section" class="content-section" style="display:none">
-        <table id="experiences-table">
-            <thead>
-                <tr>
-                    <th>Company</th>
-                    <th>Position</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($user as $experience)
+        <div id="container">
+            @if (Session::has('success'))
+                <p class="alert alert-success">{{ Session::get('success') }}</p>
+            @elseif(Session::has('error'))
+                <p class="alert alert-warning">{{ Session::get('error') }}</p>
+            @endif
+            <table class="table" id="experiences-table">
+                <thead>
                     <tr>
-                        <td><input type="text" name="company" value="{{ $experience->company }}"></td>
-                        <td><input type="text" name="title" value="{{ $experience->position }}"></td>
-                        <td><input type="date" name="start_date" value="{{ $experience->joining_date }}"></td>
-                        <td><input type="date" name="end_date" value="{{ $experience->retired_date }}"></td>
-                        <td><input type="text" name="description" value="{{ $experience->description }}"></td>
+                        <th>Company</th>
+                        <th>Position</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Description</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($experiences as $exp)
+                        <tr>
+                            <td><input type="text" name="company" value="{{ $exp->company }}" disabled></td>
+                            <td><input type="text" name="position" value="{{ $exp->position }}" disabled></td>
+                            <td><input type="date" name="start_date" value="{{ $exp->joining_date }}" disabled>
+                            </td>
+                            <td><input type="date" name="end_date" value="{{ $exp->retired_date }}" disabled>
+                            </td>
+                            <td><input type="text" name="description" value="{{ $exp->description }}" disabled>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <br>
+
+            <form action="{{ route('user.addExperiences') }}" method="POST">
+                @csrf
+                <div class="mb-3">
+                    <label for="company" class="form-label">Company</label>
+                    <input type="text" class="form-control" id="company" name="company">
+                </div>
+                <div class="mb-3">
+                    <label for="position" class="form-label">Position</label>
+                    <input type="text" class="form-control" id="position" name="position">
+                </div>
+                <div class="mb-3">
+                    <label for="joining_date" class="form-label">Start Date</label>
+                    <input type="date" class="form-control" id="joining_date" name="joining_date">
+                </div>
+                <div class="mb-3">
+                    <label for="retired_date" class="form-label">End Date</label>
+                    <input type="date" class="form-control" id="retired_date" name="retired_date">
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Add New</button>
+            </form>
+        </div>
     </div>
 
     <div id="Certificates-section" class="content-section" style="display:none">
+        @if (Session::has('success'))
+            <p class="alert alert-success">{{ Session::get('success') }}</p>
+        @endif
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Certificate Name</th>
+                    <th>Organization</th>
+                    <th>Credentials</th>
+                    <th>Expire date</th>
+                </tr>
+            </thead>
+            <tbody id="awards-table">
+                {{-- certification_name	issuing_organization	credentials	expiration_date --}}
+                @foreach ($certificates as $certificate)
+                    @if ($certificate->certification_name)
+                        <tr>
+                            <td><input type="text" name="certification_name"
+                                    value="{{ $certificate->certification_name }}" disabled>
+                            </td>
+                            <td><input type="text" name="issuing_organization"
+                                    value="{{ $certificate->issuing_organization }}" disabled>
+                            </td>
+                            <td><input type="text" name="credentials"
+                                    value="{{ $certificate->credentials ?? 'N/A' }}" disabled> </td>
+                            <td><input type="text" name="expiration_date"
+                                    value="{{ $certificate->expiration_date ?? 'N/A' }}" disabled> </td>
+                        </tr>
+                    @endif
+                @endforeach
+            </tbody>
+        </table>
+        <br>
 
+        <form action="{{ route('user.addCertificates') }}" method="POST">
+            @csrf
+            <div class="form-group">
+                <label for="certification_name">Certification Name</label>
+                <input type="text" id="certification_name" name="certification_name"
+                    value="" class="form-control" required >
+            </div>
+
+            <div class="form-group">
+                <label for="issuing_organization">Issuing Organization</label>
+                <input type="text" id="issuing_organization" name="issuing_organization"
+                    value="" class="form-control" required >
+            </div>
+
+            <div class="form-group">
+                <label for="credentials">Credentials</label>
+                <input type="text" id="credentials" name="credentials" value=""
+                    class="form-control" required >
+            </div>
+
+            <div class="form-group">
+                <label for="expiration_date">Expiration Date</label>
+                <input type="date" id="expiration_date" name="expiration_date"
+                    value="" class="form-control" required >
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
     </div>
     <div id="Skills-section" class="content-section" style="display:none">
-
+        @if (Session::has('success'))
+            <p class="alert alert-success">{{ Session::get('success') }}</p>
+        @endif
     </div>
     <div id="Education-section" class="content-section" style="display:none">
-
+        @if (Session::has('success'))
+            <p class="alert alert-success">{{ Session::get('success') }}</p>
+        @endif
     </div>
     <div id="Testimonials-section" class="content-section" style="display:none">
-
+        @if (Session::has('success'))
+            <p class="alert alert-success">{{ Session::get('success') }}</p>
+        @endif
     </div>
     <div id="About-section" class="content-section" style="display:none">
 
         <div class="card">
-            @if(Session::has('success'))
-            <p class="alert alert-success">{{ Session::get('success') }}</p>
-            @elseif(Session::has('error'))
-                <p class="alert alert-warning">{{ Session::get('error') }}</p>
+            @if (Session::has('success'))
+                <p class="alert alert-success">{{ Session::get('success') }}</p>
             @endif
             <div class="card-body">
                 <form action="{{ route('user.addAbout') }}" method="POST" enctype="multipart/form-data">
@@ -224,7 +329,7 @@
                             <div class="form-group">
                                 <label for="image_path">Image Path</label>
                                 <input type="file" class="form-control" id="image_path" name="image_path"
-                                    value="{{ asset('/storage/files/'.$info->image_path) }}">
+                                    value="{{ asset('/storage/files/' . $info->image_path) }}">
                             </div>
                             <div class="form-group">
                                 <label for="dob">Date of Birth</label>
@@ -258,7 +363,7 @@
                                 <label for="others">Others</label>
                                 <textarea class="form-control" id="others" name="others">{{ $info->others }}</textarea>
                             </div>
-                           
+
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
@@ -278,13 +383,19 @@
         </div>
     </div>
     <div id="Volunteer-section" class="content-section" style="display:none">
-
+        @if (Session::has('success'))
+            <p class="alert alert-success">{{ Session::get('success') }}</p>
+        @endif
     </div>
     <div id="Publications-section" class="content-section" style="display:none">
-
+        @if (Session::has('success'))
+            <p class="alert alert-success">{{ Session::get('success') }}</p>
+        @endif
     </div>
     <div id="Interests-section" class="content-section" style="display:none">
-
+        @if (Session::has('success'))
+            <p class="alert alert-success">{{ Session::get('success') }}</p>
+        @endif
     </div>
 
 </div>

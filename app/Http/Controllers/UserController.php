@@ -72,32 +72,59 @@ class UserController extends Controller
         $id =  Session::get('$user_id');
         $user = DB::table('users')
             ->leftJoin('awards', 'users.u_id', '=', 'awards.user_id')
-            ->leftJoin('certificates', 'users.u_id', '=', 'certificates.user_id')
-            ->leftJoin('contacts', 'users.u_id', '=', 'contacts.user_id')
-            ->leftJoin('education', 'users.u_id', '=', 'education.user_id')
-            ->leftJoin('experiences', 'users.u_id', '=', 'experiences.user_id')
-            ->leftJoin('follows', 'users.u_id', '=', 'follower')
-            ->leftJoin('interests', 'users.u_id', '=', 'interests.user_id')
-            ->leftJoin('projects', 'users.u_id', '=', 'projects.user_id')
-            ->leftJoin('publications', 'users.u_id', '=', 'publications.user_id')
-            ->leftJoin('skills', 'users.u_id', '=', 'skills.user_id')
-            ->leftJoin('testimonials', 'users.u_id', '=', 'testimonials.user_id')
-            ->leftJoin('volunteer_works', 'users.u_id', '=', 'volunteer_works.user_id')
-            ->select('users.*', 'awards.*', 'certificates.*', 'contacts.phone', 'education.*', 'experiences.*', 'follows.*', 'interests.*', 'projects.*', 'publications.*', 'skills.*', 'testimonials.*', 'volunteer_works.*')
+            ->select('users.*', 'awards.*')
             ->where('users.u_id', '=', $id)
             ->get(); //this is now working properly and IDK why
-        $following = DB::select("SELECT users.u_id, personal_infos.userName, personal_infos.image_path 
+        $following = DB::select("SELECT users.u_id,users.user_type,users.is_active, personal_infos.userName, personal_infos.image_path 
         FROM follows 
         JOIN users ON follows.following = users.u_id 
         JOIN personal_infos ON users.u_id = personal_infos.user_id 
         WHERE follows.follower =$id");
+
+        $volunteer_works = DB::table('volunteer_works')
+            ->select('volunteer_works.*')
+            ->where('volunteer_works.user_id', '=', $id)
+            ->get();
+        $testimonials = DB::table('testimonials')
+            ->select('testimonials.*')
+            ->where('testimonials.user_id', '=', $id)
+            ->get();
+        $skills = DB::table('skills')
+            ->select('skills.*')
+            ->where('skills.user_id', '=', $id)
+            ->get();
+        $publications = DB::table('publications')
+            ->select('publications.*')
+            ->where('publications.user_id', '=', $id)
+            ->get();
+        $projects = DB::table('projects')
+            ->select('projects.*')
+            ->where('projects.user_id', '=', $id)
+            ->get();
+        $interests = DB::table('interests')
+            ->select('interests.*')
+            ->where('interests.user_id', '=', $id)
+            ->get();
+        $experiences = DB::table('experiences')
+            ->select('experiences.*')
+            ->where('experiences.user_id', '=', $id)
+            ->get();
+        $education = DB::table('education')
+            ->select('education.*')
+            ->where('education.user_id', '=', $id)
+            ->get();
+        $certificates = DB::table('certificates')
+            ->select('certificates.*')
+            ->where('certificates.user_id', '=', $id)
+            ->get();
+
         $info = DB::table('users')
             ->leftJoin('contacts', 'users.u_id', '=', 'contacts.user_id')
             ->leftJoin('personal_infos', 'users.u_id', '=', 'personal_infos.user_id')
             ->select('users.u_id', 'users.user_type', 'users.is_active', 'contacts.*', 'personal_infos.*')
             ->first();
 
-        return view('dashboard', compact('user', 'following', 'info'));
+        return view('dashboard', compact('user', 'following', 'info','volunteer_works','experiences','testimonials','skills','publications','projects','interests','education','certificates'));
     }
     public function forgetPageView()
     {
@@ -250,18 +277,67 @@ class UserController extends Controller
     }
     public function addExperiences(Request $request)
     {
+        $id = Session::get('$user_id');
+        $validatedData = $request->validate([
+            'company' => 'required',
+            'position' => 'required',
+            'joining_date' => 'required|date',
+            'retired_date' => 'nullable|date|after:joining_date',
+            'description' => 'nullable',
+        ]);
+        //company	position	joining_date	retired_date	description
+        DB::table('experiences')->insert([
+            'user_id' =>  $id,
+            'company' => $request->company,
+            'position' => $request->position,
+            'joining_date' => $request->joining_date,
+            'retired_date' => $request->retired_date,
+            'description' => $request->description,
+            'created_at' => now(),
+            'updated_at' => now(),
+
+        ]);
+
+        // Redirect to the previous page with a success message
+        return redirect()->back()->with('success', 'Experience added successfully.');
     }
     public function addCertificates(Request $request)
     {
+        $id = Session::get('$user_id');
+        $validatedData = $request->validate([
+            'certification_name' => 'required',
+            'issuing_organization' => 'required',
+            'expiration_date' => 'required|date',
+            'credentials' => 'nullable',
+        ]);
+        //  certification_name	issuing_organization	credentials	expiration_date 
+        DB::table('certificates')->insert([
+            'user_id' =>  $id,
+            'certification_name' => $request->certification_name,
+            'issuing_organization' => $request->issuing_organization,
+            'expiration_date' => $request->expiration_date,
+            'credentials' => $request->credentials,
+            'created_at' => now(),
+            'updated_at' => now(),
+
+        ]);
+
+        // Redirect to the previous page with a success message
+        return redirect()->back()->with('success', 'Certificate added successfully.');
+   
+
     }
     public function addSkills(Request $request)
     {
+        $id = Session::get('$user_id');
     }
     public function addEducation(Request $request)
     {
+        $id = Session::get('$user_id');
     }
     public function addTestimonials(Request $request)
     {
+        $id = Session::get('$user_id');
     }
     public function addAbout(Request $request)
     {
@@ -287,30 +363,32 @@ class UserController extends Controller
             $path = null;
         }
         $path = str_replace('public/files/', '', $path);
-        // Upsert data into personal_infos table
-        DB::table('personal_infos')->upsert([
-            'user_id' => $id,
-            'userName' => $request->userName,
-            'fathersName' => $request->fathersName,
-            'mothersName' => $request->mothersName,
-            'image_path' => $path,
-            'dob' => $request->dob,
-            'nationality' => $request->nationality,
-            'status' => $request->status,
-            'address' => $request->address,
-            'updated_at' => now(),
-        ], ['user_id'], ['userName', 'fathersName', 'mothersName', 'image_path', 'dob', 'nationality', 'status', 'address']);
+        DB::table('personal_infos')->updateOrInsert(
+            ['user_id' => $id],
+            [
+                'userName' => $request->userName,
+                'fathersName' => $request->fathersName,
+                'mothersName' => $request->mothersName,
+                'image_path' => $path,
+                'dob' => $request->dob,
+                'nationality' => $request->nationality,
+                'status' => $request->status,
+                'address' => $request->address,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
 
-        // Upsert data into contacts table
-        DB::table('contacts')->upsert([
-            'user_id' => $id,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'others' => $request->others,
-            'updated_at' => now(),
-        ], ['user_id'], ['email', 'phone', 'others']);
-
-
+        DB::table('contacts')->updateOrInsert(
+            ['user_id' => $id],
+            [
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'others' => $request->others,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
         return redirect()->back()->with('success', 'Profile Updated  successfully!');
     }
     public function addVolunteerWorks(Request $request)
