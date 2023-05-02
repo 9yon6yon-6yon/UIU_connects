@@ -122,9 +122,10 @@ class UserController extends Controller
             ->leftJoin('contacts', 'users.u_id', '=', 'contacts.user_id')
             ->leftJoin('personal_infos', 'users.u_id', '=', 'personal_infos.user_id')
             ->select('users.u_id', 'users.user_type', 'users.is_active', 'contacts.*', 'personal_infos.*')
+            ->where('users.u_id', '=', $id)
             ->first();
 
-        return view('dashboard', compact('user', 'following', 'info','volunteer_works','experiences','testimonials','skills','publications','projects','interests','education','certificates'));
+        return view('dashboard', compact('user', 'following', 'info', 'volunteer_works', 'experiences', 'testimonials', 'skills', 'publications', 'projects', 'interests', 'education', 'certificates'));
     }
     public function forgetPageView()
     {
@@ -228,7 +229,21 @@ class UserController extends Controller
             ->where('users.u_id', $id)
             ->select('users.u_id', 'users.user_type', 'users.is_active', 'contacts.*', 'personal_infos.*')
             ->first();
-        return view('profile')->with(compact('user'));
+        $posts = DB::table('posts')
+            ->where('user_id', $id)
+            ->get();
+        $jobs = DB::table('jobs')
+            ->where('user_id', $id)
+            ->get();
+        $events = DB::table('events')
+            ->where('user_id', $id)
+            ->get();
+        $applied= DB::table('job_applications')
+            ->where('applied_user', $id)
+            ->count();
+
+
+        return view('profile')->with(compact('user', 'posts', 'jobs', 'events','applied'));
     }
     public function follows($id)
     {
@@ -324,8 +339,6 @@ class UserController extends Controller
 
         // Redirect to the previous page with a success message
         return redirect()->back()->with('success', 'Certificate added successfully.');
-   
-
     }
     public function addSkills(Request $request)
     {

@@ -13,10 +13,9 @@
             <div class="chat-heading text-center">
                 <h3>Message</h3>
                 <hr>
-            </div>
-            <div class="all-chats">
-
-                <div id="friends"></div>
+                <div class="all-chats">
+                    <div id="friends"></div>
+                </div>
             </div>
         </div>
         <div class="send-message-area " style="height: 700px;">
@@ -29,7 +28,8 @@
                 </div>
             </div>
         </div>
-        <div class="active-users-area" style="margin-top:20px;margin-left:50px;height: 700px;width:300px;  overflow-y: scroll;">
+        <div class="active-users-area"
+            style="margin-top:20px;margin-left:50px;height: 700px;width:300px;  overflow-y: scroll;">
 
             <h3>Active</h3>
             <hr>
@@ -64,8 +64,9 @@
 
             response.active_users.forEach(function(user) {
                 var userHtml = '<div>' +
-                    '<p>' + user.userName + ' <span class="status-dot ' + (user.status === 'active' ? 'active' : '') + '"></span></p>' +
-               
+                    '<p>' + user.userName + ' <span class="status-dot ' + (user.status === 'active' ?
+                        'active' : '') + '"></span></p>' +
+
                     '</div>';
                 document.getElementById('active_users').innerHTML += userHtml;
             });

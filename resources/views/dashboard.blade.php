@@ -6,7 +6,11 @@
 
 @include('nav-bar')
 <div class="container" style="margin-top: 10px;">
-
+    @if (Session::has('success'))
+        <p class="alert alert-success">{{ Session::get('success') }}</p>
+    @elseif(Session::has('error'))
+        <p class="alert alert-warning">{{ Session::get('error') }}</p>
+    @endif
     <div class="sticky-top">
         <nav class="navbar navbar-expand-lg navbar-light  bg-light">
             <div class="container-fluid">
@@ -93,11 +97,6 @@
     </div>
     <div id="Awards-section" class="content-section" style="display:none">
         <div class="container">
-            @if (Session::has('success'))
-                <p class="alert alert-success">{{ Session::get('success') }}</p>
-            @elseif(Session::has('error'))
-                <p class="alert alert-warning">{{ Session::get('error') }}</p>
-            @endif
             <table class="table">
                 <thead>
                     <tr>
@@ -161,11 +160,7 @@
     </div>
     <div id="Experiences-section" class="content-section" style="display:none">
         <div id="container">
-            @if (Session::has('success'))
-                <p class="alert alert-success">{{ Session::get('success') }}</p>
-            @elseif(Session::has('error'))
-                <p class="alert alert-warning">{{ Session::get('error') }}</p>
-            @endif
+          
             <table class="table" id="experiences-table">
                 <thead>
                     <tr>
@@ -221,9 +216,6 @@
     </div>
 
     <div id="Certificates-section" class="content-section" style="display:none">
-        @if (Session::has('success'))
-            <p class="alert alert-success">{{ Session::get('success') }}</p>
-        @endif
         <table class="table">
             <thead>
                 <tr>
@@ -259,52 +251,44 @@
             @csrf
             <div class="form-group">
                 <label for="certification_name">Certification Name</label>
-                <input type="text" id="certification_name" name="certification_name"
-                    value="" class="form-control" required >
+                <input type="text" id="certification_name" name="certification_name" value=""
+                    class="form-control" required>
             </div>
 
             <div class="form-group">
                 <label for="issuing_organization">Issuing Organization</label>
-                <input type="text" id="issuing_organization" name="issuing_organization"
-                    value="" class="form-control" required >
+                <input type="text" id="issuing_organization" name="issuing_organization" value=""
+                    class="form-control" required>
             </div>
 
             <div class="form-group">
                 <label for="credentials">Credentials</label>
-                <input type="text" id="credentials" name="credentials" value=""
-                    class="form-control" required >
+                <input type="text" id="credentials" name="credentials" value="" class="form-control"
+                    required>
             </div>
 
             <div class="form-group">
                 <label for="expiration_date">Expiration Date</label>
-                <input type="date" id="expiration_date" name="expiration_date"
-                    value="" class="form-control" required >
+                <input type="date" id="expiration_date" name="expiration_date" value=""
+                    class="form-control" required>
             </div>
 
             <button type="submit" class="btn btn-primary">Add</button>
         </form>
     </div>
     <div id="Skills-section" class="content-section" style="display:none">
-        @if (Session::has('success'))
-            <p class="alert alert-success">{{ Session::get('success') }}</p>
-        @endif
+
     </div>
     <div id="Education-section" class="content-section" style="display:none">
-        @if (Session::has('success'))
-            <p class="alert alert-success">{{ Session::get('success') }}</p>
-        @endif
+
     </div>
     <div id="Testimonials-section" class="content-section" style="display:none">
-        @if (Session::has('success'))
-            <p class="alert alert-success">{{ Session::get('success') }}</p>
-        @endif
+      
     </div>
     <div id="About-section" class="content-section" style="display:none">
 
         <div class="card">
-            @if (Session::has('success'))
-                <p class="alert alert-success">{{ Session::get('success') }}</p>
-            @endif
+          
             <div class="card-body">
                 <form action="{{ route('user.addAbout') }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -363,7 +347,12 @@
                                 <label for="others">Others</label>
                                 <textarea class="form-control" id="others" name="others">{{ $info->others }}</textarea>
                             </div>
-
+                            <div class="col-lg-6">
+                                <div class="about-avatar">
+                                    <img src="{{ asset('storage/files/' . $info->image_path) }}" title=""
+                                        alt="">
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
@@ -383,19 +372,13 @@
         </div>
     </div>
     <div id="Volunteer-section" class="content-section" style="display:none">
-        @if (Session::has('success'))
-            <p class="alert alert-success">{{ Session::get('success') }}</p>
-        @endif
+       
     </div>
     <div id="Publications-section" class="content-section" style="display:none">
-        @if (Session::has('success'))
-            <p class="alert alert-success">{{ Session::get('success') }}</p>
-        @endif
+
     </div>
     <div id="Interests-section" class="content-section" style="display:none">
-        @if (Session::has('success'))
-            <p class="alert alert-success">{{ Session::get('success') }}</p>
-        @endif
+        
     </div>
 
 </div>

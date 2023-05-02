@@ -14,52 +14,39 @@
             <div class="row align-items-center flex-row-reverse">
                 <div class="col-lg-6">
                     <div class="about-text go-to">
-                        <h3 class="dark-color">About Me</h3>
-                        <h6 class="theme-color lead">A Lead UX &amp; UI designer based in Canada</h6>
-                        <p>I <mark>design and develop</mark> services for customers of all sizes, specializing in creating stylish, modern websites, web services and online stores. My passion is to design digital user experiences through the bold interface and meaningful interactions.</p>
-                        <div class="row about-list">
+                        <h3 class="dark-color">{{ $user->userName}}</h3>
+                        <h6 class="theme-color lead"> {{ $user->email}}</h6>                        <div class="row about-list">
                             <div class="col-md-6">
                                 <div class="media">
                                     <label>Birthday</label>
-                                    <p>4th april 1998</p>
+                                    <p>{{$user->dob}}</p>
                                 </div>
                                 <div class="media">
-                                    <label>Age</label>
-                                    <p>22 Yr</p>
-                                </div>
-                                <div class="media">
-                                    <label>Residence</label>
-                                    <p>Canada</p>
+                                    <label>Nationality</label>
+                                    <p>{{$user->nationality}}</p>
                                 </div>
                                 <div class="media">
                                     <label>Address</label>
-                                    <p>California, USA</p>
+                                    <p>{{$user->address}} </p>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="media">
                                     <label>E-mail</label>
-                                    <p>info@domain.com</p>
+                                    <p>{{$user->email}} </p>
                                 </div>
                                 <div class="media">
                                     <label>Phone</label>
-                                    <p>820-885-3321</p>
+                                    <p>{{$user->phone}} </p>
                                 </div>
-                                <div class="media">
-                                    <label>Skype</label>
-                                    <p>skype.0404</p>
-                                </div>
-                                <div class="media">
-                                    <label>Freelance</label>
-                                    <p>Available</p>
-                                </div>
+                              
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="about-avatar">
-                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" title="" alt="">
+                        <img src="{{asset('storage/files/'.$user->image_path )}}" title="" alt="profile picture" width="600px" height="auto">
                     </div>
                 </div>
             </div>
@@ -67,26 +54,26 @@
                 <div class="row">
                     <div class="col-6 col-lg-3">
                         <div class="count-data text-center">
-                            <h6 class="count h2" data-to="500" data-speed="500">500</h6>
-                            <p class="m-0px font-w-600">Happy Clients</p>
+                            <h6 class="count h2" >{{ count($posts)}}</h6>
+                            <p class="m-0px font-w-600">Posts</p>
                         </div>
                     </div>
                     <div class="col-6 col-lg-3">
                         <div class="count-data text-center">
-                            <h6 class="count h2" data-to="150" data-speed="150">150</h6>
-                            <p class="m-0px font-w-600">Project Completed</p>
+                            <h6 class="count h2"  >{{ count($jobs)}}</h6>
+                            <p class="m-0px font-w-600">Jobs Posted</p>
                         </div>
                     </div>
                     <div class="col-6 col-lg-3">
                         <div class="count-data text-center">
-                            <h6 class="count h2" data-to="850" data-speed="850">850</h6>
-                            <p class="m-0px font-w-600">Photo Capture</p>
+                            <h6 class="count h2" >{{ count($events)}}</h6>
+                            <p class="m-0px font-w-600">Events Posted</p>
                         </div>
                     </div>
                     <div class="col-6 col-lg-3">
                         <div class="count-data text-center">
-                            <h6 class="count h2" data-to="190" data-speed="190">190</h6>
-                            <p class="m-0px font-w-600">Telephonic Talk</p>
+                            <h6 class="count h2">{{$applied}}</h6>
+                            <p class="m-0px font-w-600">Job Apply</p>
                         </div>
                     </div>
                 </div>
