@@ -24,27 +24,68 @@
                     <div id="messages">
                         @if (Session::has('chats'))
                             @foreach (Session::get('chats') as $chat)
-                                @if ($chat->sender_id == Session::get('$user_id'))
+                                {{-- @if ($chat->sender_id == Session::get('$user_id'))
                                     <div class="sent-message-right">
-                                        <h3>{{ $chat->message }}</h3>
+                                        <div class="row align-items-center mb-1">
+                                            <div class="col-auto order-1">
+                                                <small class="text-muted">{{ $chat->created_at }}</small>
+                                            </div>
+                                            <div class="col-auto order-2">
+                                                <img src="{{ asset('storage/files/' . $chat->image_path) }}"
+                                                    alt="User Image" class="rounded-circle" style="width: 30px;">
+                                            </div>
+                                        </div>
+                                        <h5>{{ $chat->message }}</h5>
                                     </div>
                                 @else
                                     <div class="sent-message-left">
-                                        <h3>{{ $chat->message }}</h3>
+                                        <div class="row align-items-center mb-1">
+                                            <div class="col-auto">
+                                                <img src="{{ asset('storage/files/' . $chat->image_path) }}"
+                                                    alt="User Image" class="rounded-circle" style="width: 30px;">
+                                            </div>
+                                            <div class="col-auto">
+                                                <small class="text-muted">{{ $chat->created_at }}</small>
+                                            </div>
+                                        </div>
+                                        <h5>{{ $chat->message }}</h5>
                                     </div>
-                                @endif
+                                @endif --}}
+                                @if ($chat->sender_id == Session::get('$user_id'))
+                                <div class="sent-message-right">
+                                    <div class="col-auto">
+                                        <small class="text-muted">{{ $chat->created_at }}</small>
+                                    </div>
+                                
+                                       
+                                  
+                                    <h3>{{ $chat->message }}</h3> <img src="{{ asset('storage/files/' . $chat->image_path) }}"
+                                            alt="User Image" class="rounded-circle" style="width: 30px;">
+                                </div>
+                            @else
+                                <div class="sent-message-left">
+                                 
+                                      
+                                    <div class="col-auto">
+                                        <small class="text-muted">{{ $chat->created_at }}</small>
+                                    </div> <img src="{{ asset('storage/files/' . $chat->image_path) }}"
+                                            alt="User Image" class="rounded-circle" style="width: 30px;">
+                                    <h3>{{ $chat->message }}</h3> 
+                                
+                                </div>
+                            @endif
                             @endforeach
                         @endif
                     </div>
                 </div>
                 <div class="message-input ">
-                    <form action="{{route('chat.store')}}" method="post">
+                    <form action="{{ route('chat.store') }}" method="post">
                         @csrf
-                    <input class="w-100" type="text" placeholder="Type Message Here" id="message-input" name="message">
-                    <input type="hidden" name="receiver_id" value="{{ Session::get('$receiver_id') }}">
-
-                    <button class="btn btn-primary" id="send-button">Send</button>
-                </form>
+                        <input class="w-100" type="text" placeholder="Type Message Here" id="message-input"
+                            name="message">
+                        <input type="hidden" name="receiver_id" value="{{ Session::get('$receiver_id') }}">
+                        <button class="btn btn-primary" id="send-button">Send</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -72,7 +113,9 @@
             document.getElementById('friends').innerHTML = '';
             document.getElementById('active_users').innerHTML = '';
             response.friends.forEach(function(friends) {
-                var cardHtml = '<div class="single-chat d-flex align-items-center" onclick="window.location=\'' + '{{ route('chat.show', ['id' => ':id']) }}'.replace(':id', friends.user_id) + '\'">' +
+                var cardHtml =
+                    '<div class="single-chat d-flex align-items-center" onclick="window.location=\'' +
+                    '{{ route('chat.show', ['id' => ':id']) }}'.replace(':id', friends.user_id) + '\'">' +
                     '<div class="name-and-message">' +
                     '<h4>' + friends.userName + '</h4>' +
                     '<p>Click to enter chat</p>' +

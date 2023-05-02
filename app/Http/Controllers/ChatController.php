@@ -43,7 +43,7 @@ class ChatController extends Controller
         $u_id =  Session::get('$user_id');
         Session::put('$receiver_id', $id);
         $chats = DB::table('chats')
-            ->select('chats.*', 'personal_infos.userName')
+            ->select('chats.*', 'personal_infos.userName','personal_infos.image_path')
             ->join('users', 'users.u_id', '=', 'chats.sender_id')
             ->join('personal_infos', 'personal_infos.user_id', '=', 'users.u_id')
             ->where('chats.receiver_id', $id)
