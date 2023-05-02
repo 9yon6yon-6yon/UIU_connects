@@ -72,16 +72,16 @@
             document.getElementById('friends').innerHTML = '';
             document.getElementById('active_users').innerHTML = '';
             response.friends.forEach(function(friends) {
-                var cardHtml = '<a href="{{ route('chat.show', ['id' => ':id']) }}'.replace(':id', friends
-                        .user_id) + '"> <div class="single-chat d-flex align-items-center ">' +
+                var cardHtml = '<div class="single-chat d-flex align-items-center" onclick="window.location=\'' + '{{ route('chat.show', ['id' => ':id']) }}'.replace(':id', friends.user_id) + '\'">' +
                     '<div class="name-and-message">' +
                     '<h4>' + friends.userName + '</h4>' +
                     '<p>Click to enter chat</p>' +
                     '<p>' + friends.email + '</p>' +
                     '</div>' +
-                    '</div></a>';
+                    '</div>';
                 document.getElementById('friends').innerHTML += cardHtml;
             });
+            // href="{{ route('chat.show', ['id' => ':id']) }}'.replace(':id', friends.user_id) + '"
 
             response.active_users.forEach(function(user) {
                 var userHtml = '<div>' +
