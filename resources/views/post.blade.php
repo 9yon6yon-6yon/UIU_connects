@@ -44,7 +44,7 @@
                                 <div class="user-single-post-top">
                                     <div class="poster-name-with-picture d-flex align-items-center">
                                         <div class="poster-image">
-                                            <img src="{{ asset('image/PosterAvatar.png') }}" alt="">
+                                            <img src="{{ asset('image/icons/profile.png') }}" alt="">
                                         </div>
                                         <div class="poster-details">
                                             <h4>{{ $post->post_title }}</h4>
@@ -87,7 +87,7 @@
                                 <div class="user-single-post-top">
                                     <div class="poster-name-with-picture d-flex align-items-center">
                                         <div class="poster-image">
-                                            <img src="{{ asset('image/PosterAvatar.png') }}" alt="">
+                                            <img src="{{ asset('image/icons/profile.png') }}" alt="">
                                         </div>
                                         <div class="poster-details">
                                             <h4>{{ $post->job_title }}</h4>
@@ -118,7 +118,7 @@
                                     <div class="poster-details d-flex justify-content-between">
                                         <div class="poster-name-with-picture d-flex align-items-center">
                                             <div class="poster-image">
-                                                <img src="{{ asset('image/PosterAvatar.png') }}" alt="">
+                                                <img src="{{ asset('image/icons/profile.png') }}" alt="">
                                             </div>
                                             <div class="poster-details">
                                                 <h4>{{ $event->event_title }}</h4>

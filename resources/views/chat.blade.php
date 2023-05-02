@@ -1,7 +1,7 @@
 @include('header')
 @extends('header')
 @push('title')
-    <title>Search</title>
+    <title>Chat</title>
 @endpush
 
 
@@ -9,7 +9,7 @@
 
 <div class="container">
     <div class="message-right-area d-flex" style="justify-content:center; ">
-        <div class="chat-list-area" style="margin:20px;height: 700px;width:300px;  overflow-y: scroll;">
+        <div class="chat-list-area" style="margin:20px;height: 700px;width:300px;">
             <div class="chat-heading text-center">
                 <h3>Message</h3>
                 <hr>
@@ -20,11 +20,31 @@
         </div>
         <div class="send-message-area " style="height: 700px;">
             <div class="send-chat-inner-area  d-flex flex-column justify-content-end ">
-                <div class="sent-chat">
-                    <div id="messages"></div>
+                <div class="sent-chat" style="overflow-y: scroll;">
+                    <div id="messages">
+                        @if (Session::has('chats'))
+                            @foreach (Session::get('chats') as $chat)
+                                @if ($chat->sender_id == Session::get('$user_id'))
+                                    <div class="sent-message-right">
+                                        <h3>{{ $chat->message }}</h3>
+                                    </div>
+                                @else
+                                    <div class="sent-message-left">
+                                        <h3>{{ $chat->message }}</h3>
+                                    </div>
+                                @endif
+                            @endforeach
+                        @endif
+                    </div>
                 </div>
                 <div class="message-input ">
-                    <input class="w-100" type="text" placeholder="Type Message Here">
+                    <form action="{{route('chat.store')}}" method="post">
+                        @csrf
+                    <input class="w-100" type="text" placeholder="Type Message Here" id="message-input" name="message">
+                    <input type="hidden" name="receiver_id" value="{{ Session::get('$receiver_id') }}">
+
+                    <button class="btn btn-primary" id="send-button">Send</button>
+                </form>
                 </div>
             </div>
         </div>
@@ -52,13 +72,14 @@
             document.getElementById('friends').innerHTML = '';
             document.getElementById('active_users').innerHTML = '';
             response.friends.forEach(function(friends) {
-                var cardHtml = '<div class="single-chat d-flex align-items-center ">' +
+                var cardHtml = '<a href="{{ route('chat.show', ['id' => ':id']) }}'.replace(':id', friends
+                        .user_id) + '"> <div class="single-chat d-flex align-items-center ">' +
                     '<div class="name-and-message">' +
                     '<h4>' + friends.userName + '</h4>' +
                     '<p>Click to enter chat</p>' +
                     '<p>' + friends.email + '</p>' +
                     '</div>' +
-                    ' </div>';
+                    '</div></a>';
                 document.getElementById('friends').innerHTML += cardHtml;
             });
 

@@ -160,7 +160,7 @@
     </div>
     <div id="Experiences-section" class="content-section" style="display:none">
         <div id="container">
-          
+
             <table class="table" id="experiences-table">
                 <thead>
                     <tr>
@@ -283,12 +283,12 @@
 
     </div>
     <div id="Testimonials-section" class="content-section" style="display:none">
-      
+
     </div>
     <div id="About-section" class="content-section" style="display:none">
 
         <div class="card">
-          
+
             <div class="card-body">
                 <form action="{{ route('user.addAbout') }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -299,36 +299,57 @@
                                 <label for="userName">User Name</label>
                                 <input type="text" class="form-control" id="userName" name="userName"
                                     value="{{ $info->userName }}">
+                                @if ($errors->has('userName'))
+                                    <span class="text-danger"> {{ $errors->first('userName') }} </span>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="fathersName">Father's Name</label>
                                 <input type="text" class="form-control" id="fathersName" name="fathersName"
                                     value="{{ $info->fathersName }}">
+                                @if ($errors->has('fathersName'))
+                                    <span class="text-danger"> {{ $errors->first('fathersName') }} </span>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="mothersName">Mother's Name</label>
                                 <input type="text" class="form-control" id="mothersName" name="mothersName"
                                     value="{{ $info->mothersName }}">
+                                @if ($errors->has('mothersName'))
+                                    <span class="text-danger"> {{ $errors->first('mothersName') }} </span>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="image_path">Image Path</label>
                                 <input type="file" class="form-control" id="image_path" name="image_path"
-                                    value="{{ asset('/storage/files/' . $info->image_path) }}">
+                                    value="{{ asset('/storage/files/' . $info->image_path) }}">  
+                                @if ($errors->has('image_path'))
+                                    <span class="text-danger"> {{ $errors->first('image_path') }} </span>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="dob">Date of Birth</label>
                                 <input type="date" class="form-control" id="dob" name="dob"
                                     value="{{ $info->dob }}">
+                                @if ($errors->has('dob'))
+                                    <span class="text-danger"> {{ $errors->first('dob') }} </span>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="nationality">Nationality</label>
                                 <input type="text" class="form-control" id="nationality" name="nationality"
                                     value="{{ $info->nationality }}">
+                                @if ($errors->has('nationality'))
+                                    <span class="text-danger"> {{ $errors->first('nationality') }} </span>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="status">Status</label>
                                 <input type="text" class="form-control" id="status" name="status"
                                     value="{{ $info->status }}">
+                                @if ($errors->has('status'))
+                                    <span class="text-danger"> {{ $errors->first('status') }} </span>
+                                @endif
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -337,15 +358,24 @@
                                 <label for="email">Email</label>
                                 <input type="email" class="form-control" id="email" name="email"
                                     value="{{ $info->email }}">
+                                @if ($errors->has('email'))
+                                    <span class="text-danger"> {{ $errors->first('email') }} </span>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="phone">Phone</label>
                                 <input type="tel" class="form-control" id="phone" name="phone"
                                     value="{{ $info->phone }}">
+                                @if ($errors->has('phone'))
+                                    <span class="text-danger"> {{ $errors->first('phone') }} </span>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="others">Others</label>
                                 <textarea class="form-control" id="others" name="others">{{ $info->others }}</textarea>
+                                @if ($errors->has('others'))
+                                    <span class="text-danger"> {{ $errors->first('others') }} </span>
+                                @endif
                             </div>
                             <div class="col-lg-6">
                                 <div class="about-avatar">
@@ -372,13 +402,13 @@
         </div>
     </div>
     <div id="Volunteer-section" class="content-section" style="display:none">
-       
+
     </div>
     <div id="Publications-section" class="content-section" style="display:none">
 
     </div>
     <div id="Interests-section" class="content-section" style="display:none">
-        
+
     </div>
 
 </div>

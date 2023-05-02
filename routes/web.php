@@ -75,8 +75,8 @@ Route::get('/follow/{id}', [UserController::class,'follows'])->name('follow');
 //chat functions
 Route::view('chat','chat');
 Route::post('/chat',[ChatController::class,'index'])->name('chat.dashboard');
-Route::get('/chat/{user}', [ChatController::class,'show'])->name('chat.show');
-Route::post('/chat/{user}', [ChatController::class,'store'])->name('chat.store');
+Route::get('/chat/{id}', [ChatController::class,'show'])->name('chat.show');
+Route::post('/chats', [ChatController::class,'store'])->name('chat.store');
 
 //extended profiles
 Route::post('/user/award', [UserController::class,'addAward'])->name('user.addAward');

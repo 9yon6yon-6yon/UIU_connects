@@ -20,9 +20,10 @@ class ChatController extends Controller
 
         $friends = DB::table('follows')
             ->where('follower', $user->u_id)
+            ->where('following', '!=', $user->u_id) 
             ->join('users', 'users.u_id', '=', 'follows.following')
             ->join('personal_infos', 'personal_infos.user_id', '=', 'users.u_id')
-            ->select('users.email', 'users.user_type', 'users.is_active', 'personal_infos.userName')
+            ->select('personal_infos.user_id', 'users.email', 'users.user_type', 'users.is_active', 'personal_infos.userName')
             ->get();
 
 
@@ -39,17 +40,36 @@ class ChatController extends Controller
     }
     public function show($id)
     { // Get user's chat history with another user (receiver_id)
+        $u_id =  Session::get('$user_id');
+        Session::put('$receiver_id', $id);
         $chats = DB::table('chats')
-            ->select('chats.message', 'chats.created_at', 'personal_infos.userName')
+            ->select('chats.*', 'personal_infos.userName')
             ->join('users', 'users.u_id', '=', 'chats.sender_id')
             ->join('personal_infos', 'personal_infos.user_id', '=', 'users.u_id')
             ->where('chats.receiver_id', $id)
-            ->orderBy('chats.created_at', 'desc')
+            ->where('chats.sender_id', $u_id)
+            ->orWhere('chats.receiver_id', $u_id)
+            ->where('chats.sender_id', $id)
+            ->orderBy('chats.created_at', 'ASC')
             ->get();
 
-        return response()->json(['chats' => $chats]);
+        // return response()->json(['chats' => $chats]);
+        return redirect()->back()->with(['chats' => $chats]);
     }
     public function store(Request $request)
     {
+        $sender_id = Session::get('$user_id');
+        $validatedData = $request->validate([
+            'receiver_id' => 'required',
+            'message' => 'required',
+        ]);
+        DB::table('chats')->insert([
+            'sender_id' => $sender_id,
+            'receiver_id' => $request->receiver_id,
+            'message' => $request->message,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        return redirect()->back();
     }
 }

@@ -862,10 +862,15 @@ a img {
 .chat-list-area::-webkit-scrollbar {
     display: none;
 }
-
+.sent-chat{
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.sent-chat::-webkit-scrollbar{
+    display: none;
+}
 .post-img img {
     max-width: 100%;
     max-height: 400px;
     object-fit: cover;
 }
-  
