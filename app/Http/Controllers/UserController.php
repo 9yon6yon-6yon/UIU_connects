@@ -385,7 +385,6 @@ class UserController extends Controller
             'phone' => 'required|min:11',
             'others' => 'nullable',
         ]);
-        return redirect()->back()->with('error', 'missing values!');
         if ($request->hasFile('image_path')) {
             $file = $request->file('image_path');
             $path = $file->store('public/files');

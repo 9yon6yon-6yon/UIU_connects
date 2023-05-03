@@ -824,16 +824,16 @@ button {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-  }
-  
-  .status-dot.active {
+}
+
+.status-dot.active {
     background-color: green;
-  }
-  
-  .status-dot.inactive {
+}
+
+.status-dot.inactive {
     background-color: red;
-  }
-  
+}
+
 .navbar-nav .nav-link.active {
     background-color: #F68B1F;
     color: white;
@@ -862,28 +862,44 @@ a img {
 .chat-list-area::-webkit-scrollbar {
     display: none;
 }
-.sent-chat{
+.sent-chat {
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
-.sent-chat::-webkit-scrollbar{
+.sent-chat::-webkit-scrollbar {
     display: none;
 }
+
 .post-img img {
     max-width: 100%;
     max-height: 400px;
     object-fit: cover;
 }
+
 .comments-container {
-    height: 200px; /* set a fixed height */
-    overflow: auto; /* enable scrolling */
-  }
-  .comments-container::-webkit-scrollbar {
-    display: none; /* hide scrollbar for Chrome and Safari */
-  }
-  .card.hide {
-    display: none; /* hide cards with class hide */
-  }
-  .card.show {
-    display: block; /* show cards with class show */
-  }
+    height: 200px;
+    /* set a fixed height */
+    overflow: auto;
+    /* enable scrolling */
+}
+
+.comments-container::-webkit-scrollbar {
+    display: none;
+    /* hide scrollbar for Chrome and Safari */
+}
+
+.card.hide {
+    display: none;
+    /* hide cards with class hide */
+}
+
+.card.show {
+    display: block;
+    /* show cards with class show */
+}
+
+.card-img-top {
+    height: 400px;
+    width: 200px;
+    object-fit: cover;
+}

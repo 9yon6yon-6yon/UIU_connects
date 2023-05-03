@@ -144,17 +144,19 @@
     <div id="Follows-section" class="content-section" style="display:none">
         <div class="row">
             @foreach ($following as $user)
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <img src="{{ asset('/storage/files/' . $user->image_path) }}" class="card-img-top"
-                            alt="Profile Picture">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $user->userName }}</h5>
-                            <p class="card-info">{{ $user->user_type }}</p>
-                            <span class="status-dot {{ $user->is_active == 1 ? 'active' : 'inactive' }}"></span>
+                @if ($user->u_id !== Session::get('$user_id'))
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <img src="{{ asset('/storage/files/' . $user->image_path) }}" class="card-img-top"
+                                alt="Profile Picture">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $user->userName }}</h5>
+                                <p class="card-info">{{ $user->user_type }}</p>
+                                <span class="status-dot {{ $user->is_active == 1 ? 'active' : 'inactive' }}"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
             @endforeach
         </div>
     </div>
