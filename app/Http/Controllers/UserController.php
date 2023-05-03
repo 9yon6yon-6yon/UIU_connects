@@ -343,6 +343,22 @@ class UserController extends Controller
     public function addSkills(Request $request)
     {
         $id = Session::get('$user_id');
+        $validatedData = $request->validate([
+            'skill_name' => 'required',
+            'proficiency' => 'required',
+        ]);
+        //  certification_name	issuing_organization	credentials	expiration_date 
+        DB::table('skills')->insert([
+            'user_id' =>  $id,
+            'skill_name' => $request->skill_name,
+            'proficiency' => $request->proficiency,
+            'created_at' => now(),
+            'updated_at' => now(),
+
+        ]);
+
+        // Redirect to the previous page with a success message
+        return redirect()->back()->with('success', 'Certificate added successfully.');
     }
     public function addEducation(Request $request)
     {

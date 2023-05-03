@@ -83,8 +83,7 @@
                 <input type="text" class="form-control" id="type" value="{{ $user[0]->user_type }}" disabled>
 
             </div>
-            <div class="mb-3">
-                <label for="status" class="form-label">Status</label>
+            <div class="mb-3 d-flex justify-content-between">
                 <div class="input-group">
                     @if ($user[0]->is_active == 1)
                         <span class="input-group-text bg-success text-white">Active</span>
@@ -92,6 +91,7 @@
                         <span class="input-group-text bg-danger text-white">Inactive</span>
                     @endif
                 </div>
+                {{-- <button type="submit" class="btn btn-primary" onclick="generateCV()">Generate CV</button> --}}
             </div>
         </form>
     </div>
@@ -277,7 +277,67 @@
         </form>
     </div>
     <div id="Skills-section" class="content-section" style="display:none">
+        <table class="table">
+            <thead>
+                <tr>
 
+                    <th>Skill </th>
+                    <th>proficiency</th>
+                </tr>
+            </thead>
+            <tbody id="skills-table">
+                @foreach ($skills as $skill)
+                    @if ($skill->skill_name)
+                        <tr>
+                            <td><input type="text" name="skill_name" value="{{ $skill->skill_name }}" disabled>
+                            </td>
+                            <td>
+                                <div class="progress">
+                                    @if ($skill->proficiency == 33)
+                                        <div class="progress-bar progress-bar-striped bg-danger" role="progressbar"
+                                            style="width: 33%;" aria-valuenow="33" aria-valuemin="0"
+                                            aria-valuemax="100">
+                                            Beginner
+                                        </div>
+                                    @elseif ($skill->proficiency == 66)
+                                        <div class="progress-bar progress-bar-striped bg-warning" role="progressbar"
+                                            style="width: 66%;" aria-valuenow="66" aria-valuemin="0"
+                                            aria-valuemax="100">
+                                            Intermediate
+                                        </div>
+                                    @elseif ($skill->proficiency == 100)
+                                        <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
+                                            style="width: 100%;" aria-valuenow="100" aria-valuemin="0"
+                                            aria-valuemax="100">
+                                            Advanced
+                                        </div>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+                    @endif
+                @endforeach
+            </tbody>
+        </table>
+        <br>
+        <form method="POST" action="{{ route('user.addSkills') }}">
+            @csrf
+            <div class="mb-3">
+                <label for="skill-name" class="form-label">Skill name:</label>
+                <input type="text" id="skill-name" name="skill_name" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="proficiency" class="form-label">Proficiency:</label>
+                <select id="proficiency" name="proficiency" class="form-control" required>
+                    <option value="">Choose a proficiency level</option>
+                    <option value="33">Beginner</option>
+                    <option value="66">Intermediate</option>
+                    <option value="100">Advanced</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Add skill</button>
+        </form>
     </div>
     <div id="Education-section" class="content-section" style="display:none">
 
@@ -322,7 +382,7 @@
                             <div class="form-group">
                                 <label for="image_path">Image Path</label>
                                 <input type="file" class="form-control" id="image_path" name="image_path"
-                                    value="{{ asset('/storage/files/' . $info->image_path) }}">  
+                                    value="{{ asset('/storage/files/' . $info->image_path) }}">
                                 @if ($errors->has('image_path'))
                                     <span class="text-danger"> {{ $errors->first('image_path') }} </span>
                                 @endif

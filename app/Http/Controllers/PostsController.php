@@ -200,7 +200,7 @@ class PostsController extends Controller
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
-            return redirect()->back()->with('error', 'You have already upvoted. To upvote you have to cancel upvote by clicking it again.');
+            return redirect()->back()->with('error', 'You have already upvoted. To downvote you have to cancel upvote by clicking it again.');
         }
         return redirect()->back();
     }
