@@ -24,33 +24,6 @@
                     <div id="messages">
                         @if (Session::has('chats'))
                             @foreach (Session::get('chats') as $chat)
-                                {{-- @if ($chat->sender_id == Session::get('$user_id'))
-                                    <div class="sent-message-right">
-                                        <div class="row align-items-center mb-1">
-                                            <div class="col-auto order-1">
-                                                <small class="text-muted">{{ $chat->created_at }}</small>
-                                            </div>
-                                            <div class="col-auto order-2">
-                                                <img src="{{ asset('storage/files/' . $chat->image_path) }}"
-                                                    alt="User Image" class="rounded-circle" style="width: 30px;">
-                                            </div>
-                                        </div>
-                                        <h5>{{ $chat->message }}</h5>
-                                    </div>
-                                @else
-                                    <div class="sent-message-left">
-                                        <div class="row align-items-center mb-1">
-                                            <div class="col-auto">
-                                                <img src="{{ asset('storage/files/' . $chat->image_path) }}"
-                                                    alt="User Image" class="rounded-circle" style="width: 30px;">
-                                            </div>
-                                            <div class="col-auto">
-                                                <small class="text-muted">{{ $chat->created_at }}</small>
-                                            </div>
-                                        </div>
-                                        <h5>{{ $chat->message }}</h5>
-                                    </div>
-                                @endif --}}
                                 @if ($chat->sender_id == Session::get('$user_id'))
                                 <div class="sent-message-right">
                                     <div class="col-auto">
