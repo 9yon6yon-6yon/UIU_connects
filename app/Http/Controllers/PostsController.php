@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Events;
 use App\Models\Jobs;
 use App\Models\Posts;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -121,68 +122,89 @@ class PostsController extends Controller
     public function upvote($id)
     {
         $user_id = Session::get('$user_id');
-
         // Check if the user has already upvoted this post
         $existing_vote = DB::table('votes')
             ->where('user_id', $user_id)
             ->where('pst_id', $id)
             ->where('type', 'upvote')
             ->first();
-
-        if ($existing_vote) {
-            // The user has already upvoted, so cancel their vote
-            DB::table('votes')
-                ->where('user_id', $user_id)
-                ->where('pst_id', $id)
-                ->delete();
-            DB::update("UPDATE posts SET upvotes = upvotes - 1 WHERE post_id = $id;");
-        } else {
-            // The user has not upvoted, so add their vote
-            DB::table('votes')->insert([
-                'user_id' => $user_id,
-                'pst_id' => $id,
-                'type' => 'upvote',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-            DB::update("UPDATE posts SET upvotes = upvotes + 1 WHERE post_id = $id;");
+        try {
+            DB::beginTransaction();
+            if ($existing_vote) {
+                // The user has already upvoted, so cancel their vote
+                DB::table('votes')
+                    ->where('user_id', $user_id)
+                    ->where('pst_id', $id)
+                    ->delete();
+    
+                DB::table('posts')
+                    ->where('post_id', $id)
+                    ->decrement('upvotes', 1);
+            } else {
+                // The user has not upvoted, so add their vote
+                DB::table('votes')->insert([
+                    'user_id' => $user_id,
+                    'pst_id' => $id,
+                    'type' => 'upvote',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+    
+                DB::table('posts')
+                    ->where('post_id', $id)
+                    ->increment('upvotes', 1);
+            }
+    
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', 'You have already downvoted. To upvote you have to cancel downvote by clicking it again.');
         }
-
         return redirect()->back();
     }
-
+    
     public function downvote($id)
     {
         $user_id = Session::get('$user_id');
-
+    
         // Check if the user has already downvoted this post
         $existing_vote = DB::table('votes')
             ->where('user_id', $user_id)
             ->where('pst_id', $id)
             ->where('type', 'downvote')
             ->first();
-
-        if ($existing_vote) {
-            // The user has already downvoted, so cancel their vote
-            DB::table('votes')
-                ->where('user_id', $user_id)
-                ->where('pst_id', $id)
-                ->delete();
-            DB::update("UPDATE posts SET downvotes = downvotes - 1 WHERE post_id = $id;");
-        } else {
-            // The user has not downvoted, so add their vote
-            DB::table('votes')->insert([
-                'user_id' => $user_id,
-                'pst_id' => $id,
-                'type' => 'downvote',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-            DB::update("UPDATE posts SET downvotes = downvotes + 1 WHERE post_id = $id;");
+        try {
+            DB::beginTransaction();
+            if ($existing_vote) {
+                // The user has already downvoted, so cancel their vote
+                DB::table('votes')
+                    ->where('user_id', $user_id)
+                    ->where('pst_id', $id)
+                    ->delete();
+                DB::table('posts')
+                    ->where('post_id', $id)
+                    ->decrement('downvotes', 1);
+            } else {
+                // The user has not downvoted, so add their vote
+                DB::table('votes')->insert([
+                    'user_id' => $user_id,
+                    'pst_id' => $id,
+                    'type' => 'downvote',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+                DB::table('posts')
+                    ->where('post_id', $id)
+                    ->increment('downvotes', 1);
+            }
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', 'You have already upvoted. To upvote you have to cancel upvote by clicking it again.');
         }
-
         return redirect()->back();
     }
+    
     public function comment(Request $request,$id){
         $u_id = Session::get('$user_id');
         DB::table('comments')->insert([
