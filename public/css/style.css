@@ -874,3 +874,16 @@ a img {
     max-height: 400px;
     object-fit: cover;
 }
+.comments-container {
+    height: 200px; /* set a fixed height */
+    overflow: auto; /* enable scrolling */
+  }
+  .comments-container::-webkit-scrollbar {
+    display: none; /* hide scrollbar for Chrome and Safari */
+  }
+  .card.hide {
+    display: none; /* hide cards with class hide */
+  }
+  .card.show {
+    display: block; /* show cards with class show */
+  }

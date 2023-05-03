@@ -47,41 +47,49 @@
                     <hr>
                 </div>
                 <br>
+                @if (Session::get('$user_id') == $post->user_id)
+                <div class="text-right">
+                    <form action="{{ route('delete.p.post', ['id' => $post->post_id]) }}" method="post"
+                        style="display: inline">
+                        @csrf
+                        @method('delete')
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            @endif
 
                 <h4>Comments</h4>
-                <hr>
-                @foreach ($comments as $comment)
-                    <div class="card">
-                        <div class="card-body">
-                            <p>{{ $comment->c_details }}</p>
-                            <small>Commented {{ $comment->created_at }} by
-                                {{ $comment->userName }}</small>
-                        </div>
+                <div class="comments-container">
+                    <hr>
+                    @if (count($comments) > 0)
+                        @foreach ($comments as $key => $comment)
+                            <div class="card">
+                                <div class="card-body">
+                                    <p>{{ $comment->c_details }}</p>
+                                    <img src="{{ asset('storage/files/' . $comment->image_path) }}" alt="User Image"
+                                        class="rounded-circle" style="width: 30px;">
+                                    <small>Commented {{ $comment->created_at }} by
+                                        {{ $comment->userName }}</small>
+
+                                </div>
+                            </div>
+                            <br>
+                        @endforeach
+                    @else
+                        <p>No comments yet.</p>
+                    @endif
+                </div>
+                <br>
+                <h5>Add a Comment</h5>
+                <form action="{{ route('add.comment', ['id' => $post->post_id]) }}" method="post">
+                    @csrf
+                    <div class="form-group">
+                        <textarea class="form-control" name="c_details" placeholder="Type your comment here"></textarea>
                     </div>
-                    <br>
-                @endforeach
-                <hr>
-                @if (Session::get('$user_id') == $post->user_id)
-                    <div class="text-right">
-                        <a href="{{ route('edit.p.post', ['id' => $post->post_id]) }}" class="btn btn-primary">Edit</a>
-                        <form action="{{ route('delete.p.post', ['id' => $post->post_id]) }}" method="post"
-                            style="display: inline">
-                            @csrf
-                            @method('delete')
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                    </div>
-                    <br>
-                    <h5>Add a Comment</h5>
-                    <form action="{{ route('add.comment', ['id' => $post->post_id]) }}" method="post">
-                        @csrf
-                        <div class="form-group">
-                            <textarea class="form-control" name="c_details" placeholder="Type your comment here"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="background-color:green">Submit</button>
-                    </form>
+                    <button type="submit" class="btn btn-primary" style="background-color:green">Submit</button>
+                </form>
             </div>
-            @endif
+
         </div>
     </div>
 </div>

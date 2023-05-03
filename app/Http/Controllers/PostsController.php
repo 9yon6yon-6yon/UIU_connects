@@ -81,7 +81,7 @@ class PostsController extends Controller
         $comments = DB::table('comments')
             ->join('users', 'comments.user_id', '=', 'users.u_id')
             ->join('personal_infos', 'users.u_id', '=', 'personal_infos.user_id')
-            ->select('comments.*', 'personal_infos.userName')
+            ->select('comments.*', 'personal_infos.userName','personal_infos.image_path')
             ->where('pst_id', '=', $id)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -109,9 +109,14 @@ class PostsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Posts $posts)
+    public function destroy($id)
     {
-        //
+        $u_id = Session::get('$user_id');
+        DB::table('posts')->where([
+            ['post_id', '=', $id],
+            ['user_id', '=', $u_id],
+        ])->delete();
+        return redirect()->route('user.posts')->with('success','Post Deleted');;
     }
     public function upvote($id)
     {
@@ -187,6 +192,6 @@ class PostsController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        return redirect()->back()->with('success', 'Comment stored');
+        return redirect()->back()->with('success', 'Commented successfully!');
     }
 }

@@ -90,8 +90,13 @@ class EventsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Events $events)
+    public function destroy($id)
     {
-        //
+        $u_id = Session::get('$user_id');
+        DB::table('events')->where([
+            ['event_id', '=', $id],
+            ['user_id', '=', $u_id],
+        ])->delete();
+        return redirect()->route('user.posts')->with('success','Post Deleted');;
     }
 }

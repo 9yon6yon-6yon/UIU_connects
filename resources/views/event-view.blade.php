@@ -33,7 +33,6 @@
               <br>
               @if (Session::get('$user_id') == $event->user_id)
               <div class="text-right">
-                  <a href="{{ route('edit.p.event', ['id' => $event->event_id]) }}" class="btn btn-primary">Edit</a>
                   <form action="{{ route('delete.p.event', ['id' => $event->event_id]) }}" method="post"
                       style="display: inline">
                       @csrf

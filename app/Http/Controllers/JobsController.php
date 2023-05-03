@@ -93,9 +93,14 @@ class JobsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Jobs $jobs)
+    public function destroy($id)
     {
-        //
+        $u_id = Session::get('$user_id');
+        DB::table('jobs')->where([
+            ['job_id', '=', $id],
+            ['user_id', '=', $u_id],
+        ])->delete();
+        return redirect()->route('user.posts')->with('success','Post Deleted');
     }
 
     public function applyforjob(Request $request, $id)

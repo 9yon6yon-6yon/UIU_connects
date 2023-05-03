@@ -9,6 +9,11 @@
 @include('nav-bar')
 
 <div class="home-right-side ">
+    @if (Session::has('success'))
+        <p class="alert alert-success">{{ Session::get('success') }}</p>
+    @elseif(Session::has('error'))
+        <p class="alert alert-warning">{{ Session::get('error') }}</p>
+    @endif
     <div class="container-fluid">
         <div class="sticky-top">
             <nav class="navbar navbar-expand-lg navbar-light  bg-light">
@@ -46,7 +51,10 @@
                                         <div class="poster-image">
                                             <img src="{{ asset('image/icons/profile.png') }}" alt="">
                                         </div>
-                                        <div class="poster-details">
+                                        <div class="poster-details"
+                                            onclick="window.location='{{ route('view.p.post', ['id' => $post->post_id]) }}'"
+                                            style="color: black;" onmouseover="this.style.color='#F68B1F'"
+                                            onmouseout="this.style.color='black'">
                                             <h4>{{ $post->post_title }}</h4>
                                             <small>{{ $post->created_at->diffForHumans() }}</small>
                                         </div>
@@ -89,7 +97,10 @@
                                         <div class="poster-image">
                                             <img src="{{ asset('image/icons/profile.png') }}" alt="">
                                         </div>
-                                        <div class="poster-details">
+                                        <div class="poster-details"
+                                            onclick="window.location='{{ route('view.p.job', ['id' => $post->job_id]) }}'"
+                                            style="color: black;" onmouseover="this.style.color='#F68B1F'"
+                                            onmouseout="this.style.color='black'">
                                             <h4>{{ $post->job_title }}</h4>
                                             <small>{{ $post->created_at->diffForHumans() }}</small>
                                         </div>
@@ -120,7 +131,10 @@
                                             <div class="poster-image">
                                                 <img src="{{ asset('image/icons/profile.png') }}" alt="">
                                             </div>
-                                            <div class="poster-details">
+                                            <div class="poster-details"
+                                                onclick="window.location='{{ route('view.p.event', ['id' => $event->event_id]) }}'"
+                                                style="color: black;" onmouseover="this.style.color='#F68B1F'"
+                                                onmouseout="this.style.color='black'">
                                                 <h4>{{ $event->event_title }}</h4>
                                                 <small>{{ $event->created_at->diffForHumans() }}</small>
                                             </div>

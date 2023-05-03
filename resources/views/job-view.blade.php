@@ -39,7 +39,6 @@
                 <br>
                 @if (Session::get('$user_id') == $jobs->user_id)
                     <div class="text-right">
-                        <a href="{{ route('edit.p.job', ['id' => $jobs->job_id]) }}" class="btn btn-primary">Edit</a>
                         <form action="{{ route('delete.p.job', ['id' => $jobs->job_id]) }}" method="post"
                             style="display: inline">
                             @csrf
