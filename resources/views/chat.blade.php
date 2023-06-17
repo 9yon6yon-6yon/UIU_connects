@@ -4,7 +4,6 @@
     <title>Chat</title>
 @endpush
 
-
 @include('nav-bar')
 
 <div class="container">
